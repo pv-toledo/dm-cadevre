@@ -49,5 +49,37 @@ model Course {
   updatedAt DateTime @updatedAt @map("updated_at")
   status CourseStatus @default(ACTIVE)
 
+  classPlans ClassPlan[]
+
   @@map("courses")
+}
+
+enum ModalityType {
+  INDIVIDUAL
+  GROUP
+  @@map("modality_types")
+}
+
+model Modality {
+  type ModalityType @id
+  priceCents Int @map("price_cents")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  classPlans ClassPlan[]
+
+  @@map("modalities")
+}
+
+model ClassPlan {
+  id String @id @default(uuid()) @db.Uuid
+  courseId String @db.Uuid @map("course_id")
+  modalityType ModalityType @map("modality_type")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  course Course @relation(fields: [courseId], references: [id])
+  modality Modality @relation(fields: [modalityType], references: [type])
+  @@unique([courseId, modalityType])
+
+  @@map("class_plans")
 }
