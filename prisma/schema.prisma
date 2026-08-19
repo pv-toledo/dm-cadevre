@@ -33,6 +33,8 @@ model Student {
   status StudentStatus @default(ACTIVE)
   email String?
 
+  enrollments Enrollment[]
+
   @@map("students")
 }
 
@@ -50,6 +52,7 @@ model Course {
   status CourseStatus @default(ACTIVE)
 
   classPlans ClassPlan[]
+  enrollments Enrollment[]
 
   @@map("courses")
 }
@@ -81,5 +84,31 @@ model ClassPlan {
   modality Modality @relation(fields: [modalityType], references: [type])
   @@unique([courseId, modalityType])
 
+  enrollments Enrollment[]
+
   @@map("class_plans")
+}
+
+enum EnrollmentStatus {
+  ACTIVE
+  LOCKED
+  ENDED
+  @@map("enrollment_status")
+}
+
+model Enrollment {
+  id String @id @default(uuid()) @db.Uuid
+  studentId String @map("student_id") @db.Uuid
+  classPlanId String @map("class_plan_id") @db.Uuid
+  courseId String @map("course_id") @db.Uuid
+  status EnrollmentStatus @default(ACTIVE)
+  startedAt DateTime @default(now()) @map("started_at")
+  lockedAt DateTime? @map("locked_at")
+  endedAt DateTime? @map("ended_at")
+
+  student Student @relation(fields: [studentId], references: [id])
+  classPlan ClassPlan @relation(fields: [classPlanId], references: [id])
+  course Course @relation(fields: [courseId], references: [id])
+
+  @@map("enrollments")
 }
