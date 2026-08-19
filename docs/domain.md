@@ -15,6 +15,7 @@ The main purpose of this application is to manage some operations of a small mus
 
 ## Glossary
 - **Student:** a person to be enrolled in one or more music courses
+- **Church:** the church that a student attends
 - **Course:** The subject a student studies (discipline), such as: clarinet course, violin course and flute course
 - **Modality:** The class format. Can be **Individual** or **Group**. Each one has its fixed tuition.
 - **Class plan:** The valid combination of a course and a modality (for example "Violin, Group"). Not every course offers both modalities. A class plan exists only for the combinations the school actually offers.

@@ -12,14 +12,26 @@ datasource db {
   provider = "postgresql"
 }
 
+enum StudentStatus {
+  ACTIVE
+  INACTIVE
+  @@map("student_status")
+}
+
 model Student {
-  id String @id @default(uuid())
+  id String @id @default(uuid()) @db.Uuid
   name String 
-  birthDate DateTime
-  responsibleName String?
+  birthDate DateTime @db.Date @map("birth_date")
+  studentPhoneNumber String? @map("student_phone_number")
+  responsibleName String? @map("responsible_name")
+  responsiblePhoneNumber String? @map("responsible_phone_number")
   church String
-  phoneNumber String
-  adress String?
-  photoPath String?
-  
+  address String
+  photoPath String? @map("photo_path")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  status StudentStatus @default(ACTIVE)
+  email String?
+
+  @@map("students")
 }
