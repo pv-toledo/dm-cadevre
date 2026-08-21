@@ -193,6 +193,7 @@ model Enrollment {
     @@unique([enrollmentId, referenceMonth])
 
     enrollment Enrollment @relation(fields: [enrollmentId], references: [id])
+    userProfile UserProfile? @relation(fields: [confirmedByUserId], references: [id])
 
     @@map("tuition_payments")
   }
@@ -221,6 +222,7 @@ model Enrollment {
     confirmedByUserId String @db.Uuid @map("confirmed_by_user_id")
 
     maintenanceFee MaintenanceFee @relation(fields: [maintenanceFeeId], references: [id])
+    userProfile UserProfile @relation(fields: [confirmedByUserId], references: [id])
 
     @@map("maintenance_fee_payments")
   }
@@ -242,5 +244,39 @@ model Enrollment {
 
     student Student? @relation(fields: [studentId], references: [id])
 
+    logs AuditLog[]
+    tuitionPaymentsConfirmed TuitionPayment[]
+    maintenanceFeePaymentsConfirmed MaintenanceFeePayment[]
+
     @@map("user_profiles")
+  }
+
+  enum EntityType {
+    STUDENT
+    COURSE
+    ENROLLMENT
+    CLASS_PLAN
+    MODALITY
+    INSTRUMENT
+    LOAN
+    MAINTENANCE_FEE
+    TUITION_PAYMENT
+    MAINTENANCE_FEE_PAYMENT
+    USER_PROFILE
+
+    @@map("entity_types")
+  }
+
+  model AuditLog {
+    id String @id @default(uuid()) @db.Uuid
+    actorId String @db.Uuid @map("actor_id")
+    action String
+    entityType EntityType @map("entity_type")
+    entityId String @db.Uuid @map("entity_id")
+    payload Json @db.JsonB
+    createdAt DateTime @default(now()) @map("created_at")
+
+    userProfile UserProfile @relation(fields: [actorId], references: [id])
+
+    @@map("audit_logs")
   }
