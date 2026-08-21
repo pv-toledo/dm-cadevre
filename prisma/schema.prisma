@@ -112,6 +112,7 @@ model Enrollment {
   course Course @relation(fields: [courseId], references: [id])
 
   loans Loan[]
+  tuitionPayments TuitionPayment[]
 
   @@map("enrollments")
 }
@@ -167,4 +168,29 @@ model Enrollment {
     enrollment Enrollment @relation(fields: [enrollmentId], references: [id])
 
     @@map("loans")
+  }
+
+  enum PaymentMethod {
+    CASH
+    PIX
+
+    @@map("payment_methods")
+  }
+
+  model TuitionPayment {
+    id String @id @default(uuid()) @db.Uuid
+    enrollmentId String @db.Uuid @map("enrollment_id")
+    referenceMonth DateTime @db.Date @map("reference_month")
+    amountCents Int @map("amount_cents")
+    method PaymentMethod?
+    dueDate DateTime @db.Date @map("due_date")
+    paidAt DateTime? @db.Date @map("paid_at")
+    confirmedByUserId String? @db.Uuid @map("confirmed_by_user_id")
+    confirmedAt DateTime? @db.Date @map("confirmed_at") 
+
+    @@unique([enrollmentId, referenceMonth])
+
+    enrollment Enrollment @relation(fields: [enrollmentId], references: [id])
+
+    @@map("tuition_payments")
   }
