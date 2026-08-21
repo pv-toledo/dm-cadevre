@@ -113,6 +113,7 @@ model Enrollment {
 
   loans Loan[]
   tuitionPayments TuitionPayment[]
+  maintenanceFees MaintenanceFee[]
 
   @@map("enrollments")
 }
@@ -193,4 +194,32 @@ model Enrollment {
     enrollment Enrollment @relation(fields: [enrollmentId], references: [id])
 
     @@map("tuition_payments")
+  }
+
+  model MaintenanceFee {
+    id String @id @default(uuid()) @db.Uuid
+    enrollmentId String @db.Uuid @map("enrollment_id")
+    referenceYear DateTime @db.Date @map("reference_year")
+    amountCents Int @map("amount_cents")
+    dueDate DateTime @db.Date @map("due_date")
+
+    @@unique([enrollmentId, referenceYear])
+
+    enrollment Enrollment @relation(fields: [enrollmentId], references: [id])
+    maintenanceFeePayments MaintenanceFeePayment[]
+
+    @@map("maintenance_fees")
+  }
+
+  model MaintenanceFeePayment {
+    id String @id @default(uuid()) @db.Uuid
+    maintenanceFeeId String @db.Uuid @map("maintenance_fee_id")
+    amountCents Int @map("amount_cents")
+    paidAt DateTime @db.Date @map("paid_at")
+    method PaymentMethod
+    confirmedByUserId String @db.Uuid @map("confirmed_by_user_id")
+
+    maintenanceFee MaintenanceFee @relation(fields: [maintenanceFeeId], references: [id])
+
+    @@map("maintenance_fee_payments")
   }
