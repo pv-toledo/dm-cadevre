@@ -53,6 +53,7 @@ model Course {
 
   classPlans ClassPlan[]
   enrollments Enrollment[]
+  instruments Instrument[]
 
   @@map("courses")
 }
@@ -112,3 +113,38 @@ model Enrollment {
 
   @@map("enrollments")
 }
+
+  enum InstrumentStatus {
+    AVAILABLE
+    LOANED
+    MAINTENANCE
+    RETIRED
+
+    @@map("instrument_status")
+  }
+
+  enum InstrumentCondition {
+    PERFECT
+    DEFECTIVE
+
+    @@map("instrument_condition")
+  }
+
+  model Instrument {
+    id String @id @default(uuid()) @db.Uuid
+    name String
+    courseId String @db.Uuid @map("course_id")
+    tag String @unique
+    brand String
+    model String?
+    serialNumber String? @map("serial_number")
+    condition InstrumentCondition @default(PERFECT)
+    conditionDescription String? @map("condition_description")
+    status InstrumentStatus @default(AVAILABLE)
+    createdAt DateTime @default(now()) @map("created_at")
+    updatedAt DateTime @updatedAt @map("updated_at")
+
+    course Course @relation(fields: [courseId], references: [id])
+
+    @@map("instruments")
+  }
