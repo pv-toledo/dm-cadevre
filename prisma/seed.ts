@@ -87,9 +87,37 @@ async function seedCourses() {
     await prisma.course.createMany({ data: courseData, skipDuplicates: true });
 }
 
+const INDIVIDUAL_ONLY_COURSES = ["Violão", "Guitarra", "Baixo", "Teclado", "Bateria"]
+
+async function seedClassPlans() {
+    const courseData = await prisma.course.findMany()
+
+    for (const c of courseData) {
+        if (INDIVIDUAL_ONLY_COURSES.includes(c.name)) {
+            await prisma.classPlan.upsert({
+                where: { courseId_modalityType: { courseId: c.id, modalityType: "INDIVIDUAL" } },
+                update: {},
+                create: { courseId: c.id, modalityType: "INDIVIDUAL" }
+            });
+        } else {
+            await prisma.classPlan.upsert({
+                where: { courseId_modalityType: { courseId: c.id, modalityType: "GROUP" } },
+                update: {},
+                create: { courseId: c.id, modalityType: "GROUP" }
+            });
+            await prisma.classPlan.upsert({
+                where: { courseId_modalityType: { courseId: c.id, modalityType: "INDIVIDUAL" } },
+                update: {},
+                create: { courseId: c.id, modalityType: "INDIVIDUAL" }
+            });
+        }
+    }
+}
+
 export async function main() {
     await seedModalities()
     await seedCourses()
+    await seedClassPlans()
 }
 
 main()
