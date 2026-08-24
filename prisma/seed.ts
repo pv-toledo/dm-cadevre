@@ -9,6 +9,48 @@ const prisma = new PrismaClient({
     adapter,
 });
 
+function randomItem<T>(arr: T[]): T {
+    return arr[Math.floor(Math.random() * arr.length)];
+}
+
+function shuffle<T>(arr: T[]): T[] {
+    const copy = [...arr];
+    for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+}
+
+function randomInt(min: number, max: number): number {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function randomPastDate(monthsAgo: number): Date {
+    const now = new Date();
+    const past = new Date(now);
+    past.setMonth(past.getMonth() - randomInt(1, monthsAgo));
+    return past;
+}
+
+const ENROLLMENT_STATUS_POOL = [
+    ...Array(7).fill("ACTIVE"),
+    ...Array(2).fill("LOCKED"),
+    ...Array(1).fill("ENDED"),
+];
+
+function pickUniqueByCourse<T extends { courseId: string }>(items: T[], count: number): T[] {
+    const byCourse = new Map<string, T[]>();
+    for (const item of items) {
+        const list = byCourse.get(item.courseId) ?? [];
+        list.push(item);
+        byCourse.set(item.courseId, list);
+    }
+
+    const courseIds = shuffle([...byCourse.keys()]).slice(0, count);
+    return courseIds.map((id) => randomItem(byCourse.get(id)!));
+}
+
 async function seedModalities() {
     const modalityData: Prisma.ModalityCreateInput[] =
         [
@@ -113,7 +155,7 @@ async function seedClassPlans() {
         }
     }
 }
-    async function seedStudents() {
+async function seedStudents() {
     const studentData: Prisma.StudentCreateInput[] = [
         // Children
         { name: "Ana Beatriz Souza Lima", birthDate: new Date("2012-03-14"), church: "Igreja Batista Central", address: "Rua das Palmeiras, 123 - Centro", responsibleName: "Marta Souza Lima", responsiblePhoneNumber: "(21) 98765-4321", email: "anabeatriz.lima@email.com" },
@@ -153,11 +195,49 @@ async function seedClassPlans() {
     await prisma.student.createMany({ data: studentData });
 }
 
+async function seedEnrollments() {
+    const students = await prisma.student.findMany();
+    const classPlans = await prisma.classPlan.findMany();
+
+    for (const student of students) {
+        const chosenPlans = pickUniqueByCourse(classPlans, randomInt(1, 3));
+
+        for (const plan of chosenPlans) {
+            const status = randomItem(ENROLLMENT_STATUS_POOL);
+            const startedAt = randomPastDate(18);
+
+            let lockedAt: Date | null = null;
+            let endedAt: Date | null = null;
+
+            if (status === "LOCKED") {
+                lockedAt = randomPastDate(3);
+            }
+            if (status === "ENDED") {
+                endedAt = randomPastDate(2);
+            }
+
+            await prisma.enrollment.create({
+                data: {
+                    studentId: student.id,
+                    classPlanId: plan.id,
+                    courseId: plan.courseId,
+                    status,
+                    startedAt,
+                    lockedAt,
+                    endedAt,
+                },
+            });
+        }
+    }
+}
+
+
 export async function main() {
     await seedModalities()
     await seedCourses()
     await seedClassPlans()
     await seedStudents()
+    await seedEnrollments()
 }
 
 main()
