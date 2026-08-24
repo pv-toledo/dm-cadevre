@@ -23,16 +23,73 @@ async function seedModalities() {
         ]
 
     for (const m of modalityData) {
-        await prisma.modality.upsert({ 
-            where: {type: m.type},
+        await prisma.modality.upsert({
+            where: { type: m.type },
             update: {},
             create: m
         });
     }
 }
 
+async function seedCourses() {
+    const courseData: Prisma.CourseCreateInput[] = [
+        {
+            name: "Clarinete"
+        },
+        {
+            name: "Flauta transversal"
+        },
+        {
+            name: "Violino"
+        },
+        {
+            name: "Violoncelo"
+        },
+        {
+            name: "Saxofone alto"
+        },
+        {
+            name: "Saxofone tenor"
+        },
+        {
+            name: "Trompete"
+        },
+        {
+            name: "Trombone"
+        },
+        {
+            name: "Violão"
+        },
+        {
+            name: "Guitarra"
+        },
+        {
+            name: "Baixo"
+        },
+        {
+            name: "Teclado"
+        },
+        {
+            name: "Bateria"
+        },
+        {
+            name: "Canto"
+        },
+        {
+            name: "Viola"
+        },
+        {
+            name: "Teoria musical"
+        }
+
+    ]
+
+    await prisma.course.createMany({ data: courseData, skipDuplicates: true });
+}
+
 export async function main() {
     await seedModalities()
+    await seedCourses()
 }
 
 main()
