@@ -6,12 +6,18 @@ The main purpose of this application is to manage some operations of a small mus
 - Register students and enroll them in music courses
 - Manage instrument loans for enrolled students
 - Track student payments across multiple courses
+- Collect an annual instrument maintenance fee per enrollment, payable in flexible partial installments
 
 ## Business questions
 - How many students are currently enrolled this year and how are they distributed across courses and modalities?
 - How many instruments are currently on loan? Are they loaned to enrolled (active) students?
 - What is the current payment status of each enrollment?
 - Which enrollments are locked with an instrument that hasn't been returned yet?
+- Which enrollments have settled this year's instrument maintenance fee, and which haven't?
+
+## Business rules
+
+- Locking an enrollment that has an unreturned instrument loan doesn't block the action, but warns the operator instead. The school needs to be able to register that a lock happened even if the physical instrument hasn't come back yet. The pending item stays visible on the dashboard instead of blocking the workflow.
 
 ## Glossary
 - **Student:** a person to be enrolled in one or more music courses
@@ -24,7 +30,9 @@ The main purpose of this application is to manage some operations of a small mus
   the enrollment, not to the student directly, since a student can be up
   to date on one course and late on another.
 - **Instrument:** Asset loaned by the school to a student tied to a specific enrollment. For example: a clarinet is loaned to a student enrolled in the clarinet course
+- **Loan:** The record of a specific instrument being lent to a student for a period of time, tied to the enrollment.
 - **Tuition:** Monthly fee charged to a student enrolled in a course.
+- **Maintenance fee:** Annual fee charged per enrollment, for every year the student has an active instrument loan. Can be paid by several partial payments over the year
 
 ## Non-goals
 
