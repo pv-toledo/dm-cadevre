@@ -231,6 +231,46 @@ async function seedEnrollments() {
     }
 }
 
+async function seedInstruments() {
+    const courses = await prisma.course.findMany();
+    const courseIdByName = new Map(courses.map((c) => [c.name, c.id]));
+
+    const instrumentData: (Omit<Prisma.InstrumentCreateInput, "course"> & { courseName: string })[] = [
+        { courseName: "Clarinete", name: "Clarinete Yamaha 1", tag: "CL-001", brand: "Yamaha", model: "YCL-255", serialNumber: "YCL2255891", condition: "PERFECT", status: "AVAILABLE" },
+        { courseName: "Clarinete", name: "Clarinete Yamaha 2", tag: "CL-002", brand: "Yamaha", model: "YCL-255", condition: "DEFECTIVE", conditionDescription: "Chave de sol amassada, precisa de regulagem", status: "MAINTENANCE" },
+        { courseName: "Flauta transversal", name: "Flauta Jahnke 1", tag: "FL-001", brand: "Jahnke", model: "JFL-100", serialNumber: "JFL100223", condition: "PERFECT", status: "AVAILABLE" },
+        { courseName: "Flauta transversal", name: "Flauta Jahnke 2", tag: "FL-002", brand: "Jahnke", model: "JFL-100", condition: "PERFECT", status: "AVAILABLE" },
+        { courseName: "Violino", name: "Violino Eagle 1", tag: "VI-001", brand: "Eagle", model: "VE441", serialNumber: "VE441087", condition: "PERFECT", status: "AVAILABLE" },
+        { courseName: "Violino", name: "Violino Eagle 2", tag: "VI-002", brand: "Eagle", model: "VE441", condition: "DEFECTIVE", conditionDescription: "Uma corda arrebentada, cavalete levemente desalinhado", status: "AVAILABLE" },
+        { courseName: "Violoncelo", name: "Violoncelo Michael 1", tag: "VC-001", brand: "Michael", model: "VCM130", serialNumber: "VCM130045", condition: "PERFECT", status: "AVAILABLE" },
+        { courseName: "Saxofone alto", name: "Sax Alto Weril 1", tag: "SA-001", brand: "Weril", model: "EAM2003", serialNumber: "EAM2003198", condition: "PERFECT", status: "AVAILABLE" },
+        { courseName: "Saxofone tenor", name: "Sax Tenor Weril 1", tag: "ST-001", brand: "Weril", model: "ETM2003", condition: "PERFECT", status: "AVAILABLE" },
+        { courseName: "Trompete", name: "Trompete Michael 1", tag: "TP-001", brand: "Michael", model: "WTR-30", serialNumber: "WTR30076", condition: "PERFECT", status: "AVAILABLE" },
+        { courseName: "Trompete", name: "Trompete Michael 2", tag: "TP-002", brand: "Michael", model: "WTR-30", condition: "PERFECT", status: "RETIRED" },
+        { courseName: "Trombone", name: "Trombone de Vara Eagle 1", tag: "TB-001", brand: "Eagle", model: "TV601", serialNumber: "TV601034", condition: "PERFECT", status: "AVAILABLE" },
+        { courseName: "Violão", name: "Violão Giannini 1", tag: "VL-001", brand: "Giannini", model: "GN-15", serialNumber: "GN15221", condition: "PERFECT", status: "AVAILABLE" },
+        { courseName: "Violão", name: "Violão Giannini 2", tag: "VL-002", brand: "Giannini", model: "GN-15", condition: "PERFECT", status: "AVAILABLE" },
+        { courseName: "Violão", name: "Violão Giannini 3", tag: "VL-003", brand: "Giannini", model: "GN-15", condition: "DEFECTIVE", conditionDescription: "Tarraxa do Ré travando, dificulta afinação", status: "AVAILABLE" },
+        { courseName: "Viola", name: "Viola Caipira Rozini 1", tag: "VA-001", brand: "Rozini", model: "RZ10", serialNumber: "RZ10309", condition: "PERFECT", status: "AVAILABLE" },
+        { courseName: "Guitarra", name: "Guitarra Tagima 1", tag: "GT-001", brand: "Tagima", model: "TW-55", serialNumber: "TW55412", condition: "PERFECT", status: "AVAILABLE" },
+        { courseName: "Baixo", name: "Baixo Tagima 1", tag: "BX-001", brand: "Tagima", model: "TB-300", condition: "PERFECT", status: "AVAILABLE" },
+        { courseName: "Teclado", name: "Teclado Yamaha PSR 1", tag: "TC-001", brand: "Yamaha", model: "PSR-E373", serialNumber: "PSRE373190", condition: "PERFECT", status: "AVAILABLE" },
+        { courseName: "Bateria", name: "Bateria Odery 1", tag: "BT-001", brand: "Odery", model: "Fluence", condition: "PERFECT", status: "AVAILABLE" },
+        { courseName: "Bateria", name: "Bateria Odery 2", tag: "BT-002", brand: "Odery", model: "Fluence", condition: "DEFECTIVE", conditionDescription: "Pele do bumbo furada, precisa troca", status: "MAINTENANCE" },
+    ];
+
+    for (const { courseName, ...data } of instrumentData) {
+        const courseId = courseIdByName.get(courseName);
+        if (!courseId) {
+            throw new Error(`Course not found for instrument seed: ${courseName}`);
+        }
+
+        await prisma.instrument.create({
+            data: { ...data, courseId },
+        });
+    }
+}
+
 
 export async function main() {
     await seedModalities()
@@ -238,6 +278,7 @@ export async function main() {
     await seedClassPlans()
     await seedStudents()
     await seedEnrollments()
+    await seedInstruments()
 }
 
 main()
