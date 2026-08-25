@@ -271,6 +271,95 @@ async function seedInstruments() {
     }
 }
 
+async function seedLoans() {
+    const enrollments = await prisma.enrollment.findMany();
+    const instruments = await prisma.instrument.findMany();
+
+    const instrumentsByCourse = new Map<string, typeof instruments>();
+    for (const instrument of instruments) {
+        const list = instrumentsByCourse.get(instrument.courseId) ?? [];
+        list.push(instrument);
+        instrumentsByCourse.set(instrument.courseId, list);
+    }
+
+    const busyInstrumentIds = new Set<string>();
+
+    async function createLoan(
+        enrollment: (typeof enrollments)[number],
+        forceOpen: boolean
+    ): Promise<boolean> {
+        const candidates = (instrumentsByCourse.get(enrollment.courseId) ?? []).filter(
+            (i) => i.status === "AVAILABLE" && !busyInstrumentIds.has(i.id)
+        );
+        if (candidates.length === 0) return false;
+
+        const instrument = randomItem(candidates);
+        const isOpen = forceOpen || Math.random() < 0.4;
+
+        const loanedAt = randomPastDate(6);
+        const loanCondition = randomItem(["PERFECT", "PERFECT", "PERFECT", "DEFECTIVE"] as const);
+        const loanConditionDescription =
+            loanCondition === "DEFECTIVE" ? "Pequeno desgaste identificado na retirada" : null;
+
+        if (isOpen) {
+            busyInstrumentIds.add(instrument.id);
+            await prisma.loan.create({
+                data: {
+                    instrumentId: instrument.id,
+                    enrollmentId: enrollment.id,
+                    loanCondition,
+                    loanConditionDescription,
+                    loanedAt,
+                    returnedAt: null,
+                },
+            });
+            await prisma.instrument.update({
+                where: { id: instrument.id },
+                data: { status: "LOANED" },
+            });
+        } else {
+            const returnedAt = new Date(loanedAt);
+            returnedAt.setMonth(returnedAt.getMonth() + randomInt(1, 3));
+            const returnCondition = randomItem(["PERFECT", "PERFECT", "DEFECTIVE"] as const);
+            const returnConditionDescription =
+                returnCondition === "DEFECTIVE" ? "Pequeno arranhão identificado na devolução" : null;
+
+            await prisma.loan.create({
+                data: {
+                    instrumentId: instrument.id,
+                    enrollmentId: enrollment.id,
+                    loanCondition,
+                    loanConditionDescription,
+                    loanedAt,
+                    returnedAt,
+                    returnCondition,
+                    returnConditionDescription,
+                },
+            });
+        }
+
+        return true;
+    }
+
+    const usedEnrollmentIds = new Set<string>();
+
+    const lockedEnrollments = enrollments.filter((e) => e.status === "LOCKED");
+    if (lockedEnrollments.length > 0) {
+        const chosen = randomItem(lockedEnrollments);
+        const success = await createLoan(chosen, true);
+        if (success) usedEnrollmentIds.add(chosen.id);
+    }
+
+    for (const enrollment of enrollments) {
+        if (usedEnrollmentIds.has(enrollment.id)) continue;
+        if (Math.random() < 0.35) {
+            await createLoan(enrollment, false);
+        }
+    }
+}
+
+
+
 
 export async function main() {
     await seedModalities()
@@ -279,6 +368,7 @@ export async function main() {
     await seedStudents()
     await seedEnrollments()
     await seedInstruments()
+    await seedLoans()
 }
 
 main()
