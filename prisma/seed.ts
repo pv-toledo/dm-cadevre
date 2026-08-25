@@ -374,6 +374,132 @@ async function seedUserProfiles() {
     });
 }
 
+function dateOnly(year: number, month: number, day: number): Date {
+    return new Date(Date.UTC(year, month, day));
+}
+
+function toDateOnly(d: Date): Date {
+    return new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+}
+
+function monthsBetween(start: Date, end: Date): Date[] {
+    const months: Date[] = [];
+    const cursor = new Date(start.getFullYear(), start.getMonth(), 1);
+    const last = new Date(end.getFullYear(), end.getMonth(), 1);
+    while (cursor <= last) {
+        months.push(new Date(cursor));
+        cursor.setMonth(cursor.getMonth() + 1);
+    }
+    return months;
+}
+
+async function seedTuitionPayments() {
+    const activeEnrollments = await prisma.enrollment.findMany({ where: { status: "ACTIVE" } });
+    const classPlans = await prisma.classPlan.findMany();
+    const modalities = await prisma.modality.findMany();
+
+    const priceByModality = new Map(modalities.map((m) => [m.type, m.priceCents]));
+    const classPlanById = new Map(classPlans.map((cp) => [cp.id, cp]));
+    const now = new Date();
+
+    for (const enrollment of activeEnrollments) {
+        const classPlan = classPlanById.get(enrollment.classPlanId);
+        if (!classPlan) continue;
+        const amountCents = priceByModality.get(classPlan.modalityType);
+        if (amountCents === undefined) continue;
+
+        const earliestMonth = new Date(now.getFullYear(), now.getMonth() - 5, 1);
+        const startMonth = enrollment.startedAt > earliestMonth ? enrollment.startedAt : earliestMonth;
+
+        for (const month of monthsBetween(startMonth, now)) {
+            const referenceMonth = dateOnly(month.getFullYear(), month.getMonth(), 1);
+            const dueDate = dateOnly(month.getFullYear(), month.getMonth(), 10);
+            const isCurrentMonth = month.getFullYear() === now.getFullYear() && month.getMonth() === now.getMonth();
+
+            let paidAt: Date | null = null;
+            let confirmedAt: Date | null = null;
+            let method: "CASH" | "PIX" | null = null;
+            let confirmedByUserId: string | null = null;
+
+            if (!isCurrentMonth) {
+                const outcome = randomItem(["PAID_ON_TIME", "PAID_ON_TIME", "PAID_ON_TIME", "PAID_LATE", "OVERDUE"] as const);
+
+                if (outcome !== "OVERDUE") {
+                    const offset = outcome === "PAID_ON_TIME" ? -randomInt(0, 5) : randomInt(3, 20);
+                    const paymentDate = new Date(dueDate);
+                    paymentDate.setUTCDate(paymentDate.getUTCDate() + offset);
+                    paidAt = toDateOnly(paymentDate);
+                    confirmedAt = paidAt;
+                    method = randomItem(["CASH", "PIX"] as const);
+                    confirmedByUserId = randomItem([SEED_ADMIN_ID, SEED_STAFF_ID]);
+                }
+            }
+
+            await prisma.tuitionPayment.create({
+                data: { enrollmentId: enrollment.id, referenceMonth, amountCents, dueDate, paidAt, confirmedAt, method, confirmedByUserId },
+            });
+        }
+    }
+}
+
+const MAINTENANCE_FEE_AMOUNT_CENTS = 8000
+
+async function seedMaintenanceFees() {
+    const loans = await prisma.loan.findMany();
+
+    const yearsByEnrollment = new Map<string, Set<number>>();
+    for (const loan of loans) {
+        const year = loan.loanedAt.getFullYear();
+        const set = yearsByEnrollment.get(loan.enrollmentId) ?? new Set<number>();
+        set.add(year);
+        yearsByEnrollment.set(loan.enrollmentId, set);
+    }
+
+    for (const [enrollmentId, years] of yearsByEnrollment) {
+        for (const year of years) {
+            const fee = await prisma.maintenanceFee.create({
+                data: {
+                    enrollmentId,
+                    referenceYear: dateOnly(year, 0, 1),
+                    amountCents: MAINTENANCE_FEE_AMOUNT_CENTS,
+                    dueDate: dateOnly(year, 6, 31),
+                },
+            });
+
+            const scenario = randomItem(["UNPAID", "UNPAID", "PARTIAL", "PAID_ONE_SHOT", "PAID_INSTALLMENTS"] as const);
+            if (scenario === "UNPAID") continue;
+
+            const yearStart = dateOnly(year, 0, 1);
+            const windowEnd = new Date() < dateOnly(year, 11, 31) ? new Date() : dateOnly(year, 11, 31);
+            const randomDateInYear = (): Date => {
+                const t = yearStart.getTime() + Math.random() * Math.max(0, windowEnd.getTime() - yearStart.getTime());
+                return toDateOnly(new Date(t));
+            };
+
+            const makePayment = (amountCents: number) =>
+                prisma.maintenanceFeePayment.create({
+                    data: {
+                        maintenanceFeeId: fee.id,
+                        amountCents,
+                        paidAt: randomDateInYear(),
+                        method: randomItem(["CASH", "PIX"] as const),
+                        confirmedByUserId: randomItem([SEED_ADMIN_ID, SEED_STAFF_ID]),
+                    },
+                });
+
+            if (scenario === "PARTIAL") {
+                await makePayment(Math.round(MAINTENANCE_FEE_AMOUNT_CENTS * (0.3 + Math.random() * 0.4)));
+            } else if (scenario === "PAID_ONE_SHOT") {
+                await makePayment(MAINTENANCE_FEE_AMOUNT_CENTS);
+            } else if (scenario === "PAID_INSTALLMENTS") {
+                const first = Math.round(MAINTENANCE_FEE_AMOUNT_CENTS * 0.5);
+                await makePayment(first);
+                await makePayment(MAINTENANCE_FEE_AMOUNT_CENTS - first);
+            }
+        }
+    }
+}
+
 
 export async function main() {
     await seedModalities()
@@ -384,6 +510,8 @@ export async function main() {
     await seedInstruments()
     await seedLoans()
     await seedUserProfiles()
+    await seedTuitionPayments()
+    await seedMaintenanceFees()
 }
 
 main()
