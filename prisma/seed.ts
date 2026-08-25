@@ -358,7 +358,21 @@ async function seedLoans() {
     }
 }
 
+const SEED_ADMIN_ID = "00000000-0000-0000-0000-000000000001";
+const SEED_STAFF_ID = "00000000-0000-0000-0000-000000000002";
 
+async function seedUserProfiles() {
+    await prisma.userProfile.upsert({
+        where: { id: SEED_ADMIN_ID },
+        update: {},
+        create: { id: SEED_ADMIN_ID, role: "ADMIN" },
+    });
+    await prisma.userProfile.upsert({
+        where: { id: SEED_STAFF_ID },
+        update: {},
+        create: { id: SEED_STAFF_ID, role: "STAFF" },
+    });
+}
 
 
 export async function main() {
@@ -369,6 +383,7 @@ export async function main() {
     await seedEnrollments()
     await seedInstruments()
     await seedLoans()
+    await seedUserProfiles()
 }
 
 main()
