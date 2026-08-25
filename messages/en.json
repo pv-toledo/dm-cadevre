@@ -1,4 +1,8 @@
 {
+  "LoginPage": {
+    "HomeButton": "Home"
+  },
+
   "HomePage": {
     "title": "Hello world!"
   }

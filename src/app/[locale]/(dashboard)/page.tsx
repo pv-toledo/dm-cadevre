@@ -6,6 +6,7 @@ export default function Home() {
     <div>
       <main>
         <p>{t("title")}</p>
+        <button className="bg-primary text-primary-foreground">Salvar</button>
       </main>
     </div>
   );

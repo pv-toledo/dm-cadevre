@@ -1,5 +1,10 @@
 {
+  "LoginPage": {
+    "HomeButton": "Início"
+  },
+
   "HomePage": {
-    "title": "Olá mundo!"
+    "title": "Olá mundo!",
+    "body": "Teste"
   }
 }
