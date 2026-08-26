@@ -1,6 +1,16 @@
 {
   "LoginPage": {
-    "HomeButton": "Início"
+    "HomeButton": "Início",
+    "CardTitle": "Login",
+    "CardDescription": "Entre com suas credenciais para continuar."
+  },
+
+  "LoginForm": {
+    "EmailInputError": "Insira um email válido",
+    "EmailPlaceholder": "seuemail@exemplo.com",
+    "PasswordLabel": "Senha",
+    "PasswordPlaceholder": "Insira sua senha",
+    "SubmitButton": "Entrar"
   },
 
   "HomePage": {
