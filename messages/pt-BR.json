@@ -10,7 +10,11 @@
     "EmailPlaceholder": "seuemail@exemplo.com",
     "PasswordLabel": "Senha",
     "PasswordPlaceholder": "Insira sua senha",
-    "SubmitButton": "Entrar"
+    "SubmitButton": "Entrar",
+    "InvalidCredentials": "Email ou senha incorretos.",
+    "InvalidInput": "Input inválido",
+    "UnexpectedError": "Erro inesperado.",
+    "LogingIn": "Entrando..."
   },
 
   "HomePage": {

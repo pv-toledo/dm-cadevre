@@ -10,7 +10,11 @@
     "EmailPlaceholder": "you@example.com",
     "PasswordLabel": "Password",
     "PasswordPlaceholder": "Password",
-    "SubmitButton": "Sign in"
+    "SubmitButton": "Sign in",
+    "InvalidCredentials": "Invalid credentials.",
+    "InvalidInput": "Invalid inputs",
+    "UnexpectedError": "Unexpected error.",
+    "LogingIn": "Signing in..."
   },
 
   "HomePage": {

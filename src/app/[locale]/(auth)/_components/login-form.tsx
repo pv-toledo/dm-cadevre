@@ -1,69 +1,87 @@
 "use client"
 
-import { useTranslations } from "next-intl"
-import z from "zod"
-import {Controller, useForm} from 'react-hook-form'
-import {zodResolver} from "@hookform/resolvers/zod"
+import { Locale, useTranslations } from "next-intl"
+import { Controller, useForm } from 'react-hook-form'
+import { zodResolver } from "@hookform/resolvers/zod"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import { useState } from "react"
+import { login } from "../actions"
+import { LoginFormData, loginFormSchema } from "../login-schema"
+import { useRouter } from "@/i18n/navigation"
 
-export default function LoginForm() {
+type LoginFormProps = {
+    nextPage: string
+    locale: Locale
+}
 
+export default function LoginForm({ nextPage, locale }: LoginFormProps) {
+    const router = useRouter()
+    const [error, setError] = useState<string | null>(null)
+    const [isLoading, setIsLoading] = useState<boolean>(false)
     const t = useTranslations("LoginForm")
 
-    const loginFormSchema = z.object({
-       email: z.email(`${t("EmailInputError")}`),
-       password: z.string() 
-    })
-
-    type LoginFormData = z.infer<typeof loginFormSchema>
-
-    const {control, handleSubmit} = useForm<LoginFormData>({
+    const { control, handleSubmit, formState: { isValid, errors, touchedFields } } = useForm<LoginFormData>({
         defaultValues: {
             email: "",
             password: ""
         },
-        resolver: zodResolver(loginFormSchema)
+        resolver: zodResolver(loginFormSchema),
+        mode: "onTouched"
     })
 
+    async function handleLogin(loginCredentials: LoginFormData) {
+        setError(null)
+        setIsLoading(true)
+        try {
+            const result = await login(loginCredentials, locale)
+            if (result?.error) {
+                setError(result.error)
+                setIsLoading(false)
+                return
+            }
+            router.push(nextPage)
+        } catch {
+            setError(t("UnexpectedError"))
+            setIsLoading(false)
+        }
+    }
     return (
-        <form className="flex flex-col gap-6">
+        <form onSubmit={handleSubmit(handleLogin)} className="flex flex-col gap-6">
             <div className="flex flex-col gap-1.5">
                 <Label htmlFor="email">Email</Label>
                 <Controller
                     name="email"
                     control={control}
                     render={({ field }) => (
-                        <Input {...field} id="email" type="email" placeholder={t("EmailPlaceholder")} required />
+                        <Input {...field} id="email" type="email" placeholder={t("EmailPlaceholder")} />
                     )}
                 />
             </div>
 
             <div className="flex flex-col gap-1.5">
-                <Label htmlFor="email">{t("PasswordLabel")}</Label>
+                <Label htmlFor="password">{t("PasswordLabel")}</Label>
                 <Controller
                     name="password"
                     control={control}
                     render={({ field }) => (
-                        <Input {...field} id="password" type="password" placeholder={t("PasswordPlaceholder")} required />
+                        <Input {...field} id="password" type="password" placeholder={t("PasswordPlaceholder")} />
                     )}
                 />
             </div>
 
-            {/* <PasswordField control={control} /> */}
+            {(errors.email && touchedFields.email) && (
+                <p className="text-red-500 text-sm">{t("EmailInputError")}</p>
+            )}
+            {error && (
+                <p className="text-red-500 text-sm">{error}</p>
+            )}
+            
+            <Button type="submit" className="w-full" disabled={!isValid || isLoading}>
+                {isLoading ? t("LogingIn") : t("SubmitButton")}
 
-            {/* {serverError && (
-                <Alert variant="destructive">
-                    <CircleAlert />
-                    <AlertTitle>{serverError}</AlertTitle>
-                </Alert>
-            )} */}
-
-            {/* <FormButton type="submit" disabled={isPending} className="w-full">
-                {isPending ? "Signing in…" : "Sign in"}
-            </FormButton> */}
-            <Button type="submit" className="w-full">{t("SubmitButton")}</Button>
+            </Button>
         </form>
     )
 }

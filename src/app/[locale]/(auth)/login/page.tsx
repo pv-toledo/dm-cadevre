@@ -1,9 +1,19 @@
-import { useTranslations } from "next-intl";
 import LoginForm from "../_components/login-form";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { resolveSafeRedirect } from "@/lib/safe-redirect";
+import { getLocale, getTranslations } from "next-intl/server";
 
-export default function LoginPage() {
-  const t = useTranslations("LoginPage");
+type LoginPageProps = {
+  searchParams: Promise<{
+    next?: string
+  }>
+}
+
+export default async function LoginPage({searchParams}: LoginPageProps) {
+  const params = await searchParams
+  const nextPage = resolveSafeRedirect(params.next, "/")
+  const locale = await getLocale()
+  const t = await getTranslations("LoginPage");
   return (
     <Card className="w-full max-w-sm">
       <CardHeader>
@@ -11,7 +21,7 @@ export default function LoginPage() {
         <CardDescription>{t("CardDescription")}</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-6">
-        <LoginForm/>
+        <LoginForm nextPage={nextPage} locale={locale}/>
       </CardContent>
     </Card>
   );

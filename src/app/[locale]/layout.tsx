@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
-import { hasLocale, NextIntlClientProvider } from "next-intl";
-import * as rootParams from "next/root-params";
-import { routing } from "@/i18n/routing";
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale } from "next-intl/server";
 
 const plusJakarta = Plus_Jakarta_Sans({
   variable: "--font-display",
@@ -30,9 +29,7 @@ export const metadata: Metadata = {
 
 
 export default async function RootLayout({ children }: LayoutProps<"/[locale]">) {
-
-  const requested = await rootParams.locale();
-  const locale = hasLocale(routing.locales, requested) ? requested : routing.defaultLocale;
+  const locale = await getLocale()
 
   return (
     <html
