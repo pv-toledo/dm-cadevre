@@ -22,7 +22,7 @@ export default function LoginForm({ nextPage, locale }: LoginFormProps) {
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const t = useTranslations("LoginForm")
 
-    const { control, handleSubmit, formState: { isValid, errors, touchedFields } } = useForm<LoginFormData>({
+    const { control, handleSubmit, formState: { isValid, errors, dirtyFields } } = useForm<LoginFormData>({
         defaultValues: {
             email: "",
             password: ""
@@ -71,7 +71,7 @@ export default function LoginForm({ nextPage, locale }: LoginFormProps) {
                 />
             </div>
 
-            {(errors.email && touchedFields.email) && (
+            {(errors.email && dirtyFields.email) && (
                 <p className="text-red-500 text-sm">{t("EmailInputError")}</p>
             )}
             {error && (
