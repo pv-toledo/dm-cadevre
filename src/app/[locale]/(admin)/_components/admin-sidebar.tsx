@@ -4,29 +4,15 @@ import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupConte
 
 export default function AdminSidebar() {
     return (
-        <Sidebar collapsible="icon">
-            <SidebarContent>
+        <Sidebar collapsible="icon" className="border-muted">
+            <SidebarContent className="bg-primary">
                 <SidebarGroup>
-                    {/* <SidebarGroupLabel>Painel de gerenciamento</SidebarGroupLabel> */}
+                    
                     <SidebarGroupContent>
-                        {/* <SidebarMenu>
-							{items.map((item) => (
-								<SidebarMenuItem key={item.title}>
-									<SidebarMenuButton asChild isActive={pathname === item.url}>
-										<Link href={item.url} onClick={() => setOpenMobile(false)}>
-											<item.icon />
-											<span>{item.title}</span>
-										</Link>
-									</SidebarMenuButton>
-								</SidebarMenuItem>
-							))}
-						</SidebarMenu> */}
+                       
                     </SidebarGroupContent>
                 </SidebarGroup>
             </SidebarContent>
-            <SidebarFooter>
-                <SidebarTrigger />
-            </SidebarFooter>
         </Sidebar>
     )
 }
