@@ -24,4 +24,6 @@ export async function requireAdmin(locale: Locale) {
     if (!profile || profile.role !== "ADMIN") {
         return notFound()
     }
+
+    return user
 }
