@@ -1,20 +1,27 @@
 "use client"
 
-import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarTrigger } from "@/components/ui/sidebar";
+import { Card } from "@/components/ui/card";
+import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarHeader, SidebarTrigger } from "@/components/ui/sidebar";
 import { UserProfile } from "@/generated/prisma/client";
 
 type AdminSidebarProps = {
     userData: UserProfile
 }
 
-export default function AdminSidebar({userData}: AdminSidebarProps) {
+export default function AdminSidebar({ userData }: AdminSidebarProps) {
     return (
         <Sidebar collapsible="icon" className="border-muted">
+            <SidebarHeader className="h-20 min-h-20 items-center justify-center bg-primary">
+                <Card className="w-full bg-muted">
+                    <p>{userData.role}</p>
+                </Card>
+                
+            </SidebarHeader>
             <SidebarContent className="bg-primary border-muted">
                 <SidebarGroup>
 
                     <SidebarGroupContent>
-                        <p>{userData.role}</p>
+
                     </SidebarGroupContent>
                 </SidebarGroup>
             </SidebarContent>
