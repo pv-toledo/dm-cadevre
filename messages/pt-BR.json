@@ -20,5 +20,10 @@
   "HomePage": {
     "title": "Olá mundo!",
     "body": "Teste"
+  },
+
+  "AccountMenu": {
+    "logout": "Sair",
+    "loginOut": "Saindo"
   }
 }

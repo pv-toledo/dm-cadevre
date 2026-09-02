@@ -23,7 +23,7 @@ export default async function AdminLayout({ children }: { children: ReactNode })
                         <div className="flex items-center justify-between w-full max-w-6xl mx-auto">
                             <SidebarTrigger className="md:hidden" />
                             <Logo />
-                            <AccountMenu userData={userData} />
+                            <AccountMenu userData={userData} locale={locale}/>
                         </div>
                     </header>
                     <div className="flex w-full flex-1 flex-col">

@@ -2,8 +2,9 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { LoginFormData, loginFormSchema } from "./login-schema";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { Locale } from "next-intl";
+import { redirect } from "@/i18n/navigation";
 
 export async function login (data: LoginFormData, locale: Locale) {
     const t = await getTranslations({ locale, namespace: "LoginForm" })
@@ -20,4 +21,10 @@ export async function login (data: LoginFormData, locale: Locale) {
         return {error: t("InvalidCredentials")}
     }
 
-}   
+}
+
+export async function logout(locale: Locale) {
+    const supabase = await createClient()
+    await supabase.auth.signOut()
+    redirect({href: "/login", locale})
+}

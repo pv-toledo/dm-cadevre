@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,28 +10,33 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { UserProfile } from "@/generated/prisma/client";
-import { ChevronDown } from "lucide-react";
+import { LogOut } from "lucide-react";
+import { Locale, useTranslations } from "next-intl";
+import { logout } from "../../(auth)/actions";
 
 type AccountMenuProps = {
   userData: UserProfile;
+  locale: Locale
 };
 
-export default function AccountMenu({ userData }: AccountMenuProps) {
+export default function AccountMenu({ userData, locale }: AccountMenuProps) {
+  const t = useTranslations("AccountMenu")
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="flex size-10 items-center justify-center rounded-full bg-secondary text-sm font-medium text-muted-foreground">
+      <DropdownMenuTrigger className="flex size-9 items-center justify-center rounded-full bg-secondary font-medium text-muted-foreground md:size-11">
         {userData.name.slice(0, 1).toUpperCase()}
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-fit">
         <DropdownMenuGroup>
           <DropdownMenuLabel className="flex flex-col">
-            <span>{userData.name}</span>
-            <span>Perfil: {userData.role.toLowerCase()}</span>
+            <span className="text-sm">{userData.name}</span>
+            <span className="text-xs">{userData.role.toLowerCase()}</span>
           </DropdownMenuLabel>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
-            <button>sair</button>
+        <DropdownMenuItem variant="destructive" onClick={() => logout(locale)}>
+          <LogOut className="h-4 w-4" />
+          <span>{t("logout")}</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

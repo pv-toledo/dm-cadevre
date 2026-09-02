@@ -4,7 +4,6 @@
     "CardTitle": "Sign in",
     "CardDescription": "Enter your credentials to continue."
   },
-
   "LoginForm": {
     "EmailInputError": "Enter a valid email address.",
     "EmailPlaceholder": "you@example.com",
@@ -16,8 +15,11 @@
     "UnexpectedError": "Unexpected error.",
     "LogingIn": "Signing in..."
   },
-
   "HomePage": {
     "title": "Hello world!"
+  },
+  "AccountMenu": {
+    "logout": "Sign out",
+    "loginOut": "Signing out"
   }
 }
