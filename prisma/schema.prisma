@@ -237,6 +237,7 @@ model Enrollment {
 
   model UserProfile {
     id String @id @db.Uuid
+    name String
     role UserRole
     studentId String? @db.Uuid @map("student_id")
     createdAt DateTime @default(now()) @map("created_at")

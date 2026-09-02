@@ -365,12 +365,12 @@ async function seedUserProfiles() {
     await prisma.userProfile.upsert({
         where: { id: SEED_ADMIN_ID },
         update: {},
-        create: { id: SEED_ADMIN_ID, role: "ADMIN" },
+        create: { id: SEED_ADMIN_ID, role: "ADMIN", name: "Admin Teste" },
     });
     await prisma.userProfile.upsert({
         where: { id: SEED_STAFF_ID },
         update: {},
-        create: { id: SEED_STAFF_ID, role: "STAFF" },
+        create: { id: SEED_STAFF_ID, role: "STAFF",name: "Staff Teste" },
     });
 }
 

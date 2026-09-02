@@ -5,6 +5,7 @@ import AdminSidebar from "./_components/admin-sidebar";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { Logo } from "@/components/logo";
 import { getUserData } from "@/lib/auth/get-user-data";
+import AccountMenu from "./_components/account-menu";
 
 
 export default async function AdminLayout({ children }: { children: ReactNode }) {
@@ -22,7 +23,7 @@ export default async function AdminLayout({ children }: { children: ReactNode })
                         <div className="flex items-center justify-between w-full max-w-6xl mx-auto">
                             <SidebarTrigger className="md:hidden" />
                             <Logo />
-                            <button>sair</button>
+                            <AccountMenu userData={userData} />
                         </div>
                     </header>
                     <div className="flex w-full flex-1 flex-col">

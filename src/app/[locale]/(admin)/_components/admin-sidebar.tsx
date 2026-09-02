@@ -11,13 +11,11 @@ type AdminSidebarProps = {
 export default function AdminSidebar({ userData }: AdminSidebarProps) {
     return (
         <Sidebar collapsible="icon" className="border-muted">
-            <SidebarHeader className="h-20 min-h-20 items-center justify-center bg-primary">
-                <Card className="w-full bg-muted">
-                    <p>{userData.role}</p>
-                </Card>
+            <SidebarHeader className="h-20 min-h-20 items-center justify-center bg-secondary">
+                
                 
             </SidebarHeader>
-            <SidebarContent className="bg-primary border-muted">
+            <SidebarContent className="bg-secondary border-muted">
                 <SidebarGroup>
 
                     <SidebarGroupContent>
@@ -25,8 +23,8 @@ export default function AdminSidebar({ userData }: AdminSidebarProps) {
                     </SidebarGroupContent>
                 </SidebarGroup>
             </SidebarContent>
-            <SidebarFooter className="bg-primary">
-                <SidebarTrigger className="text-primary-foreground hover:bg-primary hover:text-primary-foreground" />
+            <SidebarFooter className="bg-secondary">
+                <SidebarTrigger />
             </SidebarFooter>
         </Sidebar>
     )
