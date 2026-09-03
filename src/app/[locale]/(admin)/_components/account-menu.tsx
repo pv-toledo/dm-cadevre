@@ -23,7 +23,7 @@ export default function AccountMenu({ userData, locale }: AccountMenuProps) {
   const t = useTranslations("AccountMenu")
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="flex size-9 items-center justify-center rounded-full bg-secondary font-medium text-muted-foreground md:size-11">
+      <DropdownMenuTrigger className="flex size-9 items-center justify-center rounded-full border-2 border-primary bg-secondary font-medium text-sidebar-foreground md:size-11">
         {userData.name.slice(0, 1).toUpperCase()}
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-fit">

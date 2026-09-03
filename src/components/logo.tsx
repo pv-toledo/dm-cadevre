@@ -7,7 +7,6 @@ import { cn } from "@/lib/utils";
  */
 function CadevreMark({ className, ...props }: SVGProps<SVGSVGElement>) {
   const gradientId = useId();
-
   return (
     <svg
       viewBox="0 0 64 64"
@@ -17,25 +16,17 @@ function CadevreMark({ className, ...props }: SVGProps<SVGSVGElement>) {
       {...props}
     >
       <defs>
-        {/* Stops mirror the --primary token (hue 210) at +11L for the highlight,
-            with light/dark variants so the mark repaints with the theme. */}
         <linearGradient id={gradientId} x1="15%" y1="0%" x2="90%" y2="100%">
-          <stop
-            offset="0%"
-            className="[stop-color:#439ba7] dark:[stop-color:#62cddc]"
-          />
-          <stop
-            offset="100%"
-            className="[stop-color:#1a7987] dark:[stop-color:#3ba9ba]"
-          />
+          <stop offset="0%" stopColor="#FFC667" />
+          <stop offset="100%" stopColor="#D08700" />
         </linearGradient>
       </defs>
       <circle cx="32" cy="32" r="32" fill={`url(#${gradientId})`} />
       <g transform="rotate(-6 32 32)">
         <g
           transform="translate(23.899,51.200) scale(0.00159,-0.00159)"
-          fill="#ffffff"
-          stroke="#ffffff"
+          fill="#0B0905"
+          stroke="#0B0905"
           strokeWidth={481.6}
           strokeLinejoin="round"
           strokeLinecap="round"
@@ -49,7 +40,6 @@ function CadevreMark({ className, ...props }: SVGProps<SVGSVGElement>) {
 
 interface LogoProps {
   className?: string;
-  /** Hide the wordmark and render only the circular mark (e.g. collapsed sidebar). */
   iconOnly?: boolean;
 }
 

@@ -15,14 +15,14 @@ export default async function AdminLayout({ children }: { children: ReactNode })
 
     return (
         <SidebarProvider>
-            <AdminSidebar locale={locale}/>
+            <AdminSidebar locale={locale} />
             <SidebarInset>
                 <main className="flex size-full flex-col items-center">
-                    <header className="flex h-16 min-h-16 w-full shrink-0 px-4 border-b border-b-foreground/10 md:h-20 md:min-h-20">
+                    <header className="dark bg-sidebar text-sidebar-foreground flex h-16 min-h-16 w-full shrink-0 px-4 border-b-2 border-b-sidebar-primary/40 md:h-20 md:min-h-20">
                         <div className="flex items-center justify-between w-full max-w-6xl mx-auto">
                             <SidebarTrigger className="md:hidden" />
                             <Logo />
-                            <AccountMenu userData={profile} locale={locale}/>
+                            <AccountMenu userData={profile} locale={locale} />
                         </div>
                     </header>
                     <div className="flex w-full flex-1 flex-col">
