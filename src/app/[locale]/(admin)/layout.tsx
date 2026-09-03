@@ -5,12 +5,17 @@ import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/s
 import { Logo } from "@/components/logo";
 import AccountMenu from "./_components/account-menu";
 import { requireAdmin } from "@/lib/auth/require-role";
+import { cookies } from "next/headers";
 
 export default async function AdminLayout({ children }: { children: ReactNode }) {
     const locale = await getLocale()
     const profile = await requireAdmin(locale)
+
+    const cookieStore = await cookies();
+	const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
+
     return (
-        <SidebarProvider>
+        <SidebarProvider defaultOpen={defaultOpen}>
             <AdminSidebar locale={locale} />
             <SidebarInset>
                 <main className="flex size-full flex-col items-center">
