@@ -1,29 +1,51 @@
 "use client"
 
-import { Card } from "@/components/ui/card";
-import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarHeader, SidebarTrigger } from "@/components/ui/sidebar";
-import { UserProfile } from "@/generated/prisma/client";
+import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
+import { Link, usePathname } from "@/i18n/navigation";
+import { Users } from "lucide-react";
+import { Locale, useTranslations } from "next-intl";
 
 type AdminSidebarProps = {
-    userData: UserProfile
+    locale: Locale
 }
 
-export default function AdminSidebar({ userData }: AdminSidebarProps) {
+export default function AdminSidebar({locale}: AdminSidebarProps) {
+    const pathname = usePathname()
+    const { setOpenMobile } = useSidebar()
+    const t = useTranslations("Sidebar")
+
+    const items = [
+        {
+            title: t("students"),
+            url: "/students",
+            icon: Users
+        }
+    ]
+
     return (
         <Sidebar collapsible="icon" className="border-muted">
-            <SidebarHeader className="h-20 min-h-20 items-center justify-center bg-secondary">
-                
-                
-            </SidebarHeader>
-            <SidebarContent className="bg-secondary border-muted">
+            <SidebarContent>
                 <SidebarGroup>
-
+                    <SidebarGroupLabel>{t("title")}</SidebarGroupLabel>
                     <SidebarGroupContent>
-
+                        <SidebarMenu>
+                            {items.map((item) => (
+                                <SidebarMenuItem key={item.title}>
+                                    <SidebarMenuButton isActive={pathname === item.url}
+                                        render={
+                                            <Link href={item.url} locale={locale} onClick={() => setOpenMobile(false)}>
+                                                <item.icon />
+                                                <span>{item.title}</span>
+                                            </Link>
+                                        }
+                                    />
+                                </SidebarMenuItem>
+                            ))}
+                        </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>
             </SidebarContent>
-            <SidebarFooter className="bg-secondary">
+            <SidebarFooter>
                 <SidebarTrigger />
             </SidebarFooter>
         </Sidebar>

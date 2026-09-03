@@ -25,5 +25,10 @@
   "AccountMenu": {
     "logout": "Sair",
     "loginOut": "Saindo"
+  },
+
+  "Sidebar": {
+    "title": "Painel de gerenciamento",
+    "students": "Alunos"
   }
 }

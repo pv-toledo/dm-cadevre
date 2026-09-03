@@ -21,5 +21,10 @@
   "AccountMenu": {
     "logout": "Sign out",
     "loginOut": "Signing out"
+  },
+
+  "Sidebar": {
+    "title": "Admin panel",
+    "students": "Students"
   }
 }

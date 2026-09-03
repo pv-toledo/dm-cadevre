@@ -15,7 +15,7 @@ export default async function AdminLayout({ children }: { children: ReactNode })
 
     return (
         <SidebarProvider>
-            <AdminSidebar userData={profile}/>
+            <AdminSidebar locale={locale}/>
             <SidebarInset>
                 <main className="flex size-full flex-col items-center">
                     <header className="flex h-16 min-h-16 w-full shrink-0 px-4 border-b border-b-foreground/10 md:h-20 md:min-h-20">
