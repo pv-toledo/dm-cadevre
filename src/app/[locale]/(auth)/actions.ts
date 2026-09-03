@@ -2,7 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { LoginFormData, loginFormSchema } from "./login-schema";
-import { getLocale, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { Locale } from "next-intl";
 import { redirect } from "@/i18n/navigation";
 

@@ -1,12 +1,11 @@
-"use server"
-
 import { redirect } from "@/i18n/navigation"
 import { createClient } from "../supabase/server"
+import { Locale } from "next-intl"
+import { UserRole } from "@/generated/prisma/enums"
 import prisma from "../prisma"
 import { notFound } from "next/navigation"
-import { Locale } from "next-intl"
 
-export async function requireAdmin(locale: Locale) {
+export async function requireRole(locale: Locale, allowedRoles: UserRole[]) {
     const supabase = await createClient()
 
     const { data: { user }, error } = await supabase.auth.getUser()
@@ -21,9 +20,13 @@ export async function requireAdmin(locale: Locale) {
         }
     })
 
-    if (!profile || profile.role !== "ADMIN") {
+    if (!profile || !allowedRoles.includes(profile.role)) {
         return notFound()
     }
 
-    return user
+    return profile
+}
+
+export async function requireAdmin(locale: Locale) {
+    return requireRole(locale, [UserRole.ADMIN]);
 }
