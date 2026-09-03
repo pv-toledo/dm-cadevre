@@ -6,34 +6,26 @@ import { Logo } from "@/components/logo";
 import AccountMenu from "./_components/account-menu";
 import { requireAdmin } from "@/lib/auth/require-role";
 
-
-
 export default async function AdminLayout({ children }: { children: ReactNode }) {
-
     const locale = await getLocale()
     const profile = await requireAdmin(locale)
-
     return (
         <SidebarProvider>
             <AdminSidebar locale={locale} />
             <SidebarInset>
                 <main className="flex size-full flex-col items-center">
-                    <header className="dark bg-sidebar text-sidebar-foreground flex h-16 min-h-16 w-full shrink-0 px-4 border-b-2 border-b-sidebar-primary/40 md:h-20 md:min-h-20">
-                        <div className="flex items-center justify-between w-full max-w-6xl mx-auto">
+                    <header className="dark bg-sidebar text-sidebar-foreground flex h-16 min-h-16 w-full shrink-0 border-b-2 border-b-sidebar-primary/40 md:h-20 md:min-h-20">
+                        <div className="flex items-center justify-between w-full max-w-7xl mx-auto px-4">
                             <SidebarTrigger className="md:hidden" />
                             <Logo />
                             <AccountMenu userData={profile} locale={locale} />
                         </div>
                     </header>
-                    <div className="flex w-full flex-1 flex-col">
+                    <div className="flex w-full max-w-7xl mx-auto px-4 flex-1 flex-col">
                         {children}
                     </div>
                 </main>
             </SidebarInset>
-
         </SidebarProvider>
-
-
-
     )
 }
