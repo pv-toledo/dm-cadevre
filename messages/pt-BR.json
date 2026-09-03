@@ -30,5 +30,9 @@
   "Sidebar": {
     "title": "Painel de gerenciamento",
     "students": "Alunos"
+  },
+
+  "StudentsPage": {
+    "title": "Alunos"
   }
 }

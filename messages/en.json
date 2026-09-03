@@ -26,5 +26,9 @@
   "Sidebar": {
     "title": "Admin panel",
     "students": "Students"
+  },
+
+  "StudentsPage": {
+    "title": "Students"
   }
 }
