@@ -1,6 +1,5 @@
 "use client"
-
-import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
+import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 import { Link, usePathname } from "@/i18n/navigation";
 import { Users } from "lucide-react";
 import { Locale, useTranslations } from "next-intl";
@@ -9,11 +8,10 @@ type AdminSidebarProps = {
     locale: Locale
 }
 
-export default function AdminSidebar({locale}: AdminSidebarProps) {
+export default function AdminSidebar({ locale }: AdminSidebarProps) {
     const pathname = usePathname()
     const { setOpenMobile } = useSidebar()
     const t = useTranslations("Sidebar")
-
     const items = [
         {
             title: t("students"),
@@ -21,9 +19,8 @@ export default function AdminSidebar({locale}: AdminSidebarProps) {
             icon: Users
         }
     ]
-
     return (
-        <Sidebar collapsible="icon" className="border-muted">
+        <Sidebar collapsible="icon" className="dark border-sidebar-border">
             <SidebarContent>
                 <SidebarGroup>
                     <SidebarGroupLabel>{t("title")}</SidebarGroupLabel>
@@ -31,7 +28,8 @@ export default function AdminSidebar({locale}: AdminSidebarProps) {
                         <SidebarMenu>
                             {items.map((item) => (
                                 <SidebarMenuItem key={item.title}>
-                                    <SidebarMenuButton isActive={pathname === item.url}
+                                    <SidebarMenuButton
+                                        isActive={pathname === item.url}
                                         render={
                                             <Link href={item.url} locale={locale} onClick={() => setOpenMobile(false)}>
                                                 <item.icon />
