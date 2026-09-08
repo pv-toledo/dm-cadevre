@@ -2,16 +2,27 @@ import prisma from "@/lib/prisma"
 import { getTranslations } from "next-intl/server"
 import StudentCard from "../_components/student-card"
 
+
+
 export default async function StudentsPage() {
+
+    const today = new Date()
+    const currentMonth = new Date(today.getFullYear(), today.getMonth(), 1)
+
     const students = await prisma.student.findMany({
         include: {
             enrollments: {
                 include: {
-                    course: true
+                    tuitionPayments: {
+                        where: {
+                            referenceMonth: currentMonth
+                        }
+                    }
                 }
             }
         }
     }) ?? []
+    // console.dir(students[0].enrollments, { depth: null })
     const t = await getTranslations("StudentsPage")
     return (
         <div className="flex flex-col gap-10 pt-4">
@@ -24,10 +35,13 @@ export default async function StudentsPage() {
                         studentBirthDate={student.birthDate}
                         studentPhoneNumber={student.studentPhoneNumber}
                         responsiblePhoneNumber={student.responsiblePhoneNumber}
+                        studentStatus={student.status}
+                        studentEnrollments={student.enrollments}
                     />
                 ))}
 
             </section>
+            
         </div>
     )
 }   
