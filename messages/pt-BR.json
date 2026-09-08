@@ -37,6 +37,7 @@
   },
 
   "StudentCard": {
-    "overdueStatus": "Atrasado"
+    "overdueStatus": "Atrasado",
+    "age": "anos"
   }
 }
