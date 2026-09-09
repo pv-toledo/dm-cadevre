@@ -1,55 +1,52 @@
 import { Avatar, AvatarBadge, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { Enrollment, Prisma, TuitionPayment } from "@/generated/prisma/client";
+import { Enrollment, Prisma, Student, TuitionPayment } from "@/generated/prisma/client";
 import { StudentStatus } from "@/generated/prisma/enums";
 import { calculateAge, cn } from "@/lib/utils";
 import { getTranslations } from "next-intl/server";
 
-type EnrollmentWithRelations = Prisma.EnrollmentGetPayload<{
+type StudentWithEnrollmentsAndTuitionPayment = Prisma.StudentGetPayload<{
   include: {
-    tuitionPayments: true;
-  };
-}>;
+    enrollments: {
+      include: {
+        tuitionPayments: true
+      }
+    }
+  }
+}>
+
 
 type StudentCardProps = {
-  studentName: string;
-  studentBirthDate: Date;
-  studentPhoneNumber: string | null;
-  responsiblePhoneNumber: string | null;
-  studentStatus: StudentStatus;
-  studentEnrollments: EnrollmentWithRelations[];
+  student: StudentWithEnrollmentsAndTuitionPayment
 };
 
 export default async function StudentCard({
-  studentName,
-  studentBirthDate,
-  studentPhoneNumber,
-  responsiblePhoneNumber,
-  studentStatus,
-  studentEnrollments,
+  student
 }: StudentCardProps) {
   const t = await getTranslations("StudentCard");
-  const studentAge = calculateAge(studentBirthDate);
+  const studentAge = calculateAge(student.birthDate);
 
-  const today = new Date();
 
-  const overdueTuition = studentEnrollments.find((enrollment) =>
-    enrollment.tuitionPayments.some(
-      (tuition) => tuition.paidAt === null && tuition.dueDate < today,
-    ),
-  );
+  // const overdueTuition = studentEnrollments.find((enrollment) =>
+  //   enrollment.tuitionPayments.some(
+  //     (tuition) => tuition.paidAt === null && tuition.dueDate < today,
+  //   ),
+  // );
 
-// console.log(studentEnrollments)
-studentEnrollments.map(enrollment => console.log(enrollment.tuitionPayments))
+  // studentEnrollments.map(enrollment => console.log(enrollment.tuitionPayments))
   // const overdueTuition = studentEnrollments.find(e => e.tuitionPayments[0].paidAt === null && e.tuitionPayments.length > 0)
 
-
+  // student.enrollments.forEach(enrollment => {
+  //   enrollment.tuitionPayments.map(t => {
+  //     console.log(t.dueDate)
+  //   })
+  // })
   return (
     <Card
       className={cn(
         "py-4 border-l-4",
-        studentStatus === "ACTIVE"
+        student.status === "ACTIVE"
           ? "border-l-transparent"
           : "border-l-red-500",
       )}
@@ -59,22 +56,26 @@ studentEnrollments.map(enrollment => console.log(enrollment.tuitionPayments))
           <AvatarFallback>PV</AvatarFallback>
           <AvatarBadge
             className={cn(
-              studentStatus === "ACTIVE" ? "bg-green-500" : "bg-red-500",
+              student.status === "ACTIVE" ? "bg-green-500" : "bg-red-500",
             )}
           />
         </Avatar>
         <div className="flex flex-col justify-between">
-          <p>{studentName}</p>
+          <p>{student.name}</p>
           <div className="flex gap-1">
-            {overdueTuition === undefined && (
-              <Badge variant="destructive">{t("overdueStatus")}</Badge>
-            ) }
+            {student.enrollments.some((enrollment) =>
+              enrollment.tuitionPayments.some((tp) => tp.paidAt === null)
+            ) && (
+                <Badge variant="destructive">
+                  {t("overdueStatus")}
+                </Badge>
+              )}
             <span>
               {studentAge} {t("age")}
             </span>
             <span>•</span>
             <span>
-              {studentPhoneNumber ? studentPhoneNumber : responsiblePhoneNumber}
+              {student.studentPhoneNumber ? student.studentPhoneNumber : student.responsiblePhoneNumber}
             </span>
           </div>
         </div>

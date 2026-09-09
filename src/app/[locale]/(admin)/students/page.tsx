@@ -13,16 +13,12 @@ export default async function StudentsPage() {
         include: {
             enrollments: {
                 include: {
-                    tuitionPayments: {
-                        where: {
-                            referenceMonth: currentMonth
-                        }
-                    }
+                    tuitionPayments: true
                 }
             }
         }
-    }) ?? []
-    // console.dir(students[0].enrollments, { depth: null })
+    })
+
     const t = await getTranslations("StudentsPage")
     return (
         <div className="flex flex-col gap-10 pt-4">
@@ -31,12 +27,7 @@ export default async function StudentsPage() {
                 {students.map(student => (
                     <StudentCard
                         key={student.id}
-                        studentName={student.name}
-                        studentBirthDate={student.birthDate}
-                        studentPhoneNumber={student.studentPhoneNumber}
-                        responsiblePhoneNumber={student.responsiblePhoneNumber}
-                        studentStatus={student.status}
-                        studentEnrollments={student.enrollments}
+                        student={student}
                     />
                 ))}
 
