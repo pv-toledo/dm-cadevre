@@ -40,6 +40,11 @@ export default async function StudentCard({
     ),
   );
 
+// console.log(studentEnrollments)
+studentEnrollments.map(enrollment => console.log(enrollment.tuitionPayments))
+  // const overdueTuition = studentEnrollments.find(e => e.tuitionPayments[0].paidAt === null && e.tuitionPayments.length > 0)
+
+
   return (
     <Card
       className={cn(
@@ -61,9 +66,9 @@ export default async function StudentCard({
         <div className="flex flex-col justify-between">
           <p>{studentName}</p>
           <div className="flex gap-1">
-            {overdueTuition && (
+            {overdueTuition === undefined && (
               <Badge variant="destructive">{t("overdueStatus")}</Badge>
-            )}
+            ) }
             <span>
               {studentAge} {t("age")}
             </span>

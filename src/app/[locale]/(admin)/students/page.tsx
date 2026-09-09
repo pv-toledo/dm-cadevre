@@ -40,6 +40,18 @@ export default async function StudentsPage() {
                     />
                 ))}
 
+                {/* {student && (
+                    <StudentCard
+                        key={student.id}
+                        studentName={student.name}
+                        studentBirthDate={student.birthDate}
+                        studentPhoneNumber={student.studentPhoneNumber}
+                        responsiblePhoneNumber={student.responsiblePhoneNumber}
+                        studentStatus={student.status}
+                        studentEnrollments={student.enrollments}
+                    />
+                )} */}
+
             </section>
             
         </div>
