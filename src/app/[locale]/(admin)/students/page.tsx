@@ -7,10 +7,16 @@ import { SearchParams } from "nuqs/server";
 
 export default async function StudentsPage({searchParams}: {searchParams:Promise<SearchParams>}) {
 
-  const { active } = studentSearchParamsCache.parse(await searchParams);
+  const { active, q } = studentSearchParamsCache.parse(await searchParams);
 
   const students = await prisma.student.findMany({
-    where: active ? { status: "ACTIVE" } : undefined,
+    where: {
+      status: active ? "ACTIVE" : undefined,
+      name: q ? {
+        contains: q,
+        mode: "insensitive"
+      } : undefined
+    },
     include: {
       enrollments: {
         include: {
@@ -19,7 +25,7 @@ export default async function StudentsPage({searchParams}: {searchParams:Promise
       },
     },
     orderBy: {
-      name: "desc"
+      name: "asc"
     }
   });
 
