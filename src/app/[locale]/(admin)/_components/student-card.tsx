@@ -2,7 +2,7 @@ import { Avatar, AvatarBadge, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Prisma, } from "@/generated/prisma/client";
-import { calculateAge, cn } from "@/lib/utils";
+import { calculateAge, cn, getInitials } from "@/lib/utils";
 import { getTranslations } from "next-intl/server";
 
 type StudentWithEnrollmentsAndTuitionPayment = Prisma.StudentGetPayload<{
@@ -37,7 +37,7 @@ export default async function StudentCard({
     >
       <CardContent className="flex flex-row gap-3 items-center ">
         <Avatar size="lg">
-          <AvatarFallback>PV</AvatarFallback>
+          <AvatarFallback>{getInitials(student.name)}</AvatarFallback>
           <AvatarBadge
             className={cn(
               student.status === "ACTIVE" ? "bg-green-500" : "bg-red-500",

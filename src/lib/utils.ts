@@ -11,3 +11,10 @@ export function calculateAge(birthDate: Date) {
   const ageDate = new Date(diff);
   return Math.abs(ageDate.getUTCFullYear() - 1970);
 }
+
+export function getInitials(fullName: string): string {
+  const names = fullName.trim().split(/\s+/)
+
+  return `${names[0][0]}${names[names.length - 1][0]}`.toUpperCase()
+}
+
