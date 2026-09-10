@@ -6,9 +6,6 @@ import StudentCard from "../_components/student-card"
 
 export default async function StudentsPage() {
 
-    const today = new Date()
-    const currentMonth = new Date(today.getFullYear(), today.getMonth(), 1)
-
     const students = await prisma.student.findMany({
         include: {
             enrollments: {
@@ -30,18 +27,6 @@ export default async function StudentsPage() {
                         student={student}
                     />
                 ))}
-
-                {/* {student && (
-                    <StudentCard
-                        key={student.id}
-                        studentName={student.name}
-                        studentBirthDate={student.birthDate}
-                        studentPhoneNumber={student.studentPhoneNumber}
-                        responsiblePhoneNumber={student.responsiblePhoneNumber}
-                        studentStatus={student.status}
-                        studentEnrollments={student.enrollments}
-                    />
-                )} */}
 
             </section>
             

@@ -1,8 +1,7 @@
 import { Avatar, AvatarBadge, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { Enrollment, Prisma, Student, TuitionPayment } from "@/generated/prisma/client";
-import { StudentStatus } from "@/generated/prisma/enums";
+import { Prisma, } from "@/generated/prisma/client";
 import { calculateAge, cn } from "@/lib/utils";
 import { getTranslations } from "next-intl/server";
 
@@ -27,21 +26,6 @@ export default async function StudentCard({
   const t = await getTranslations("StudentCard");
   const studentAge = calculateAge(student.birthDate);
 
-
-  // const overdueTuition = studentEnrollments.find((enrollment) =>
-  //   enrollment.tuitionPayments.some(
-  //     (tuition) => tuition.paidAt === null && tuition.dueDate < today,
-  //   ),
-  // );
-
-  // studentEnrollments.map(enrollment => console.log(enrollment.tuitionPayments))
-  // const overdueTuition = studentEnrollments.find(e => e.tuitionPayments[0].paidAt === null && e.tuitionPayments.length > 0)
-
-  // student.enrollments.forEach(enrollment => {
-  //   enrollment.tuitionPayments.map(t => {
-  //     console.log(t.dueDate)
-  //   })
-  // })
   return (
     <Card
       className={cn(
