@@ -3,6 +3,7 @@ import { Inter, JetBrains_Mono, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale } from "next-intl/server";
+import { NuqsAdapter } from 'nuqs/adapters/next/app'
 
 const plusJakarta = Plus_Jakarta_Sans({
   variable: "--font-display",
@@ -37,7 +38,11 @@ export default async function RootLayout({ children }: LayoutProps<"/[locale]">)
       className={`${plusJakarta.variable} ${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        <NextIntlClientProvider>
+          <NuqsAdapter>
+            {children}
+          </NuqsAdapter>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

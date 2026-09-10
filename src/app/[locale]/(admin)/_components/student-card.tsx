@@ -15,7 +15,6 @@ type StudentWithEnrollmentsAndTuitionPayment = Prisma.StudentGetPayload<{
   }
 }>
 
-
 type StudentCardProps = {
   student: StudentWithEnrollmentsAndTuitionPayment
 };
