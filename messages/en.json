@@ -29,7 +29,8 @@
   },
 
   "StudentsPage": {
-    "title": "Students"
+    "title": "Students",
+    "description": "Music school student management"
   },
 
   "StudentCard": {

@@ -33,7 +33,8 @@
   },
 
   "StudentsPage": {
-    "title": "Alunos"
+    "title": "Alunos",
+    "description": "Gerenciamento dos alunos matriculados na escola de música"
   },
 
   "StudentCard": {
