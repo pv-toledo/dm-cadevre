@@ -40,5 +40,11 @@
   "StudentCard": {
     "overdueStatus": "Atrasado",
     "age": "anos"
+  },
+  "StudentsFilter": {
+    "activeFilter": "Ativos",
+    "overdueFilter": "Atrasados",
+    "searchInputPlaceholder": "Buscar por nome",
+    "filterLabel": "Filtrar por"
   }
 }

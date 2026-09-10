@@ -22,19 +22,22 @@
     "logout": "Sign out",
     "loginOut": "Signing out"
   },
-
   "Sidebar": {
     "title": "Admin panel",
     "students": "Students"
   },
-
   "StudentsPage": {
     "title": "Students",
     "description": "Music school student management"
   },
-
   "StudentCard": {
     "overdueStatus": "Overdue",
     "age": "years old"
+  },
+  "StudentsFilter": {
+    "activeFilter": "Active",
+    "overdueFilter": "Overdue",
+    "searchInputPlaceholder": "Search by name",
+    "filterLabel": "Filter by"
   }
 }
