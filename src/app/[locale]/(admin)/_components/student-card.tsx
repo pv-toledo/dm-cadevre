@@ -31,10 +31,10 @@ export default async function StudentCard({
         "py-4 border-l-4",
         student.status === "ACTIVE"
           ? "border-l-transparent"
-          : "border-l-red-500",
+          : "border-l-red-500 rounded-l-none",
       )}
     >
-      <CardContent className="flex flex-row gap-3 items-center ">
+      <CardContent className="flex flex-row gap-3 items-center">
         <Avatar size="lg">
           <AvatarFallback>{getInitials(student.name)}</AvatarFallback>
           <AvatarBadge
