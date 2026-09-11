@@ -38,6 +38,10 @@
     "newButton": "Novo aluno"
   },
 
+  "NewStudentPage": {
+    "title": "Novo aluno"
+  },
+
   "StudentCard": {
     "overdueStatus": "Atrasado",
     "age": "anos"

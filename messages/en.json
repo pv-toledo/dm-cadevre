@@ -31,6 +31,11 @@
     "description": "Music school student management",
     "newButton": "New student"
   },
+
+  "NewStudentPage": {
+    "title": "New student"
+  },
+
   "StudentCard": {
     "overdueStatus": "Overdue",
     "age": "years old"
