@@ -28,7 +28,8 @@
   },
   "StudentsPage": {
     "title": "Students",
-    "description": "Music school student management"
+    "description": "Music school student management",
+    "newButton": "New student"
   },
   "StudentCard": {
     "overdueStatus": "Overdue",

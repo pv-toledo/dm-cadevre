@@ -4,8 +4,11 @@ import StudentCard from "../_components/student-card";
 import StudentsFilter from "../_components/students-filter";
 import { studentSearchParamsCache } from "@/lib/nuqs/student-search-params";
 import { SearchParams } from "nuqs/server";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { PlusCircleIcon } from "lucide-react";
 
-export default async function StudentsPage({searchParams}: {searchParams:Promise<SearchParams>}) {
+export default async function StudentsPage({ searchParams }: { searchParams: Promise<SearchParams> }) {
 
   const { active, q } = studentSearchParamsCache.parse(await searchParams);
 
@@ -33,7 +36,15 @@ export default async function StudentsPage({searchParams}: {searchParams:Promise
   return (
     <div className="flex flex-col gap-10 mt-8 lg:mt-12">
       <div className="flex flex-col gap-1">
-        <h1 className="font-display text-2xl lg:text-3xl">{t("title")}</h1>
+        <div className="flex justify-between items-center">
+          <h1 className="font-display text-3xl lg:text-4xl">{t("title")}</h1>
+          <Link href={"/students/new"}>
+            <Button size="lg" className="flex items-center">
+              <PlusCircleIcon />
+              <span>{t("newButton")}</span>
+            </Button>
+          </Link>
+        </div>
         <h2 className="font-display text-secondary-foreground">{t("description")}</h2>
       </div>
       <StudentsFilter />
