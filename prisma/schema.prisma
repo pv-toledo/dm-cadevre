@@ -25,7 +25,7 @@ model Student {
   studentPhoneNumber String? @map("student_phone_number")
   responsibleName String? @map("responsible_name")
   responsiblePhoneNumber String? @map("responsible_phone_number")
-  church String
+  church String?
   address String
   photoPath String? @map("photo_path")
   createdAt DateTime @default(now()) @map("created_at")
