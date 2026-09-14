@@ -44,7 +44,7 @@ export function DateInput({ id, name }: { id: string; name: string }) {
           <InputGroupInput
             id={id}
             value={text}
-            placeholder="dd/mm/yyyy"
+            placeholder="dd/mm/aaaa"
             inputMode="numeric"
             autoComplete="off"
             onChange={(e) => {
