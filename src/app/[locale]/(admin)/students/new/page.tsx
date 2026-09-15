@@ -50,7 +50,7 @@ const newStudentFormSchema = z
     }
   })
 
-type NewStudentFormData = z.infer<typeof newStudentFormSchema>
+export type NewStudentFormData = z.infer<typeof newStudentFormSchema>
 
 export default function NewStudentPage() {
 
@@ -74,7 +74,7 @@ export default function NewStudentPage() {
             const payload = {
                 ...data,
                 studentPhoneNumber: null,
-                church: data.church?.trim().length === 0 ? null : data.church
+                church: data.church?.trim().length ? data.church : null
             }
 
             console.log(payload)
