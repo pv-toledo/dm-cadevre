@@ -17,6 +17,12 @@ import {
 } from "@/components/ui/popover"
 import { useState } from "react"
 
+type DateInputProps = {
+  id: string,
+  value?: Date,
+  onChange: (date?: Date) => void
+}
+
 function maskDate(raw: string) {
   const digits = raw.replace(/\D/g, "").slice(0, 8)
   if (digits.length <= 2) return digits
@@ -24,16 +30,17 @@ function maskDate(raw: string) {
   return `${digits.slice(0, 2)}/${digits.slice(2, 4)}/${digits.slice(4)}`
 }
 
-function parseDate(text: string) {
+export function parseDate(text: string) {
   if (text.length !== 10) return undefined
   const date = parse(text, "dd/MM/yyyy", new Date())
   return isValid(date) ? date : undefined
 }
 
-export function DateInput({ id, name }: { id: string; name: string }) {
+export function DateInput({ id, value, onChange }: DateInputProps) {
   const [open, setOpen] = useState(false)
   const [text, setText] = useState("")
   const [month, setMonth] = useState<Date>()
+  
 
   const date = parseDate(text)
 
@@ -51,7 +58,10 @@ export function DateInput({ id, name }: { id: string; name: string }) {
               const next = maskDate(e.target.value)
               setText(next)
               const parsed = parseDate(next)
-              if (parsed) setMonth(parsed)
+              if (parsed) {
+                setMonth(parsed)
+                onChange(parsed)
+              }
             }}
           />
           <InputGroupAddon align="inline-end">
@@ -81,7 +91,11 @@ export function DateInput({ id, name }: { id: string; name: string }) {
             onMonthChange={setMonth}
             captionLayout="dropdown-years"
             onSelect={(selected) => {
+              if (!selected) return
+
               setText(format(selected, "dd/MM/yyyy"))
+              onChange(selected)
+
               setOpen(false)
             }}
           />
@@ -89,7 +103,6 @@ export function DateInput({ id, name }: { id: string; name: string }) {
       </Popover>
       <input
         type="hidden"
-        name={name}
         value={date ? format(date, "yyyy-MM-dd") : ""}
       />
     </>
