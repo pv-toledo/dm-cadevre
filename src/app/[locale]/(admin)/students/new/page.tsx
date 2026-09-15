@@ -70,7 +70,24 @@ export default function NewStudentPage() {
     const studentAge = birthDate ? calculateAge(birthDate) : undefined
 
     function handleSubmit(data: NewStudentFormData) {
-        console.log(data.birthDate.toISOString())
+        if (studentAge && studentAge < 18) {
+            const payload = {
+                ...data,
+                studentPhoneNumber: null,
+                church: data.church?.trim().length === 0 ? null : data.church
+            }
+
+            console.log(payload)
+        } else {
+            const payload = {
+                ...data,
+                responsibleName: null,
+                responsiblePhoneNumber: null,
+                church: data.church?.trim().length === 0 ? null : data.church
+            }
+
+            console.log(payload)
+        }
     }
 
     const t = useTranslations("NewStudentPage")
