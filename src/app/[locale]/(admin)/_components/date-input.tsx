@@ -19,7 +19,6 @@ import { useState } from "react"
 
 type DateInputProps = {
   id: string,
-  value?: Date,
   onChange: (date?: Date) => void
 }
 
@@ -36,7 +35,7 @@ export function parseDate(text: string) {
   return isValid(date) ? date : undefined
 }
 
-export function DateInput({ id, value, onChange }: DateInputProps) {
+export function DateInput({ id, onChange }: DateInputProps) {
   const [open, setOpen] = useState(false)
   const [text, setText] = useState("")
   const [month, setMonth] = useState<Date>()
@@ -60,8 +59,10 @@ export function DateInput({ id, value, onChange }: DateInputProps) {
               const parsed = parseDate(next)
               if (parsed) {
                 setMonth(parsed)
-                onChange(parsed)
+                
               }
+
+              onChange(parsed)
             }}
           />
           <InputGroupAddon align="inline-end">
