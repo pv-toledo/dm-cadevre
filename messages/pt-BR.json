@@ -39,7 +39,19 @@
   },
 
   "NewStudentPage": {
-    "title": "Novo aluno"
+    "title": "Novo aluno",
+    "fullNameField": "Nome completo",
+    "birthDateField": "Data de nascimento",
+    "ageField": "Idade",
+    "responsibleNameField": "Nome do responsável",
+    "responsiblePhoneNumberField": "Telefone do responsável",
+    "studentPhoneNumberField": "Telefone do aluno",
+    "churchField": "Igreja",
+    "addressField": "Endereço",
+    "submitButtonDefault": "Salvar",
+    "submitButtonSubmitting": "Salvando...",
+    "successToastMessage": "Aluno criado com sucesso",
+    "errorToastMessage": "Erro ao criar aluno"
   },
 
   "StudentCard": {

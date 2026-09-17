@@ -31,11 +31,21 @@
     "description": "Music school student management",
     "newButton": "New student"
   },
-
   "NewStudentPage": {
-    "title": "New student"
+    "title": "New student",
+    "fullNameField": "Full name",
+    "birthDateField": "Birth date",
+    "ageField": "Age",
+    "responsibleNameField": "Responsible name",
+    "responsiblePhoneNumberField": "Responsible phone number",
+    "studentPhoneNumberField": "Student phone number",
+    "churchField": "Church",
+    "addressField": "Address",
+    "submitButtonDefault": "Register",
+    "submitButtonSubmitting": "Registering...",
+    "successToastMessage": "Student created successfully",
+    "errorToastMessage": "Error creating student"
   },
-
   "StudentCard": {
     "overdueStatus": "Overdue",
     "age": "years old"

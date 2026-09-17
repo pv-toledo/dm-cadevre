@@ -64,6 +64,7 @@ export function DateInput({ id, onChange }: DateInputProps) {
 
               onChange(parsed)
             }}
+            className="text-sm lg:text-base"
           />
           <InputGroupAddon align="inline-end">
             <PopoverTrigger
@@ -105,6 +106,7 @@ export function DateInput({ id, onChange }: DateInputProps) {
       <input
         type="hidden"
         value={date ? format(date, "yyyy-MM-dd") : ""}
+        className="text-sm lg:text-base"
       />
     </>
   )

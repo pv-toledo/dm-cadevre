@@ -76,12 +76,12 @@ export default function NewStudentForm() {
             await createStudent(data)
             toast.add({
                 type: "success",
-                description: "Aluno criado com sucesso"
+                description: t("successToastMessage")
             })
         } catch {
             toast.add({
                 type: "error",
-                description: "Erro ao criar novo aluno"
+                description: t("errorToastMessage")
             })
         }
     }
@@ -95,7 +95,7 @@ export default function NewStudentForm() {
                 control={form.control}
                 render={({ field }) => (
                     <Field className="flex flex-col gap-2">
-                        <FieldLabel className="lg:text-base" htmlFor="name">Nome completo *</FieldLabel>
+                        <FieldLabel className="lg:text-base" htmlFor="name">{t("fullNameField")} *</FieldLabel>
                         <Input {...field} id="name" autoComplete="off" className="text-sm lg:text-base" />
                     </Field>
                 )}
@@ -107,11 +107,11 @@ export default function NewStudentForm() {
                 render={({ field }) => (
                     <div className="flex gap-5 items-center">
                         <div className="flex flex-col gap-2">
-                            <FieldLabel className="lg:text-base" htmlFor="birthDate">Data de nascimento *</FieldLabel>
+                            <FieldLabel className="lg:text-base" htmlFor="birthDate">{t("birthDateField")} *</FieldLabel>
                             <DateInput {...field} id="birthDate" />
                         </div>
                         <div className="flex flex-col gap-2">
-                            <FieldLabel>Idade</FieldLabel>
+                            <FieldLabel>{t("ageField")}</FieldLabel>
                             <Input id="age" disabled value={studentAge ?? ""} />
                         </div>
                     </div>
@@ -125,7 +125,7 @@ export default function NewStudentForm() {
                         control={form.control}
                         render={({ field }) => (
                             <Field className="flex flex-col gap-2">
-                                <FieldLabel className="lg:text-base" htmlFor="responsibleName">Nome do responsável *</FieldLabel>
+                                <FieldLabel className="lg:text-base" htmlFor="responsibleName">{t("responsibleNameField")} *</FieldLabel>
                                 <Input {...field} id="responsibleName" className="text-sm lg:text-base" />
                             </Field>
                         )}
@@ -136,7 +136,7 @@ export default function NewStudentForm() {
                         control={form.control}
                         render={({ field }) => (
                             <Field className="flex flex-col gap-2">
-                                <FieldLabel className="lg:text-base" htmlFor="responsiblePhoneNumber">Telefone do responsável *</FieldLabel>
+                                <FieldLabel className="lg:text-base" htmlFor="responsiblePhoneNumber">{t("responsiblePhoneNumberField")} *</FieldLabel>
                                 <Input {...field} id="responsiblePhoneNumber" className="text-sm lg:text-base" />
                             </Field>
 
@@ -149,7 +149,7 @@ export default function NewStudentForm() {
                     control={form.control}
                     render={({ field }) => (
                         <Field className="flex flex-col gap-2">
-                            <FieldLabel className="lg:text-base" htmlFor="studentPhoneNumber">Telefone do aluno *</FieldLabel>
+                            <FieldLabel className="lg:text-base" htmlFor="studentPhoneNumber">{t("studentPhoneNumberField")} *</FieldLabel>
                             <Input {...field} id="studentPhoneNumber" className="text-sm lg:text-base" />
                         </Field>
                     )}
@@ -161,7 +161,7 @@ export default function NewStudentForm() {
                 control={form.control}
                 render={({ field }) => (
                     <Field className="flex flex-col gap-2">
-                        <FieldLabel className="lg:text-base" htmlFor="church">Igreja</FieldLabel>
+                        <FieldLabel className="lg:text-base" htmlFor="church">{t("churchField")}</FieldLabel>
                         <Input {...field} id="church" className="text-sm lg:text-base" />
                     </Field>
                 )}
@@ -172,13 +172,15 @@ export default function NewStudentForm() {
                 control={form.control}
                 render={({ field }) => (
                     <Field className="flex flex-col gap-2">
-                        <FieldLabel className="lg:text-base" htmlFor="address">Endereço *</FieldLabel>
+                        <FieldLabel className="lg:text-base" htmlFor="address">{t("addressField")} *</FieldLabel>
                         <Input {...field} id="address" className="text-sm lg:text-base" />
                     </Field>
                 )}
             />
 
-            <Button type="submit" disabled={!form.formState.isValid || form.formState.isSubmitting}>Salvar</Button>
+            <Button type="submit" disabled={!form.formState.isValid || form.formState.isSubmitting}>
+                {form.formState.isSubmitting ? t("submitButtonSubmitting") : t("submitButtonDefault")}
+            </Button>
         </form>
 
 
