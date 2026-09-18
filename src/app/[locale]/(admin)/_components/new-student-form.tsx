@@ -95,7 +95,7 @@ export default function NewStudentForm() {
                 control={form.control}
                 render={({ field }) => (
                     <Field className="flex flex-col gap-2">
-                        <FieldLabel className="lg:text-base" htmlFor="name">{t("fullNameField")} *</FieldLabel>
+                        <FieldLabel className="lg:text-base" htmlFor="name">{t("fullNameField")}<span className="text-destructive">*</span></FieldLabel>
                         <Input {...field} id="name" autoComplete="off" className="text-sm lg:text-base" />
                     </Field>
                 )}
@@ -107,7 +107,7 @@ export default function NewStudentForm() {
                 render={({ field }) => (
                     <div className="flex gap-5 items-center">
                         <div className="flex flex-col gap-2">
-                            <FieldLabel className="lg:text-base" htmlFor="birthDate">{t("birthDateField")} *</FieldLabel>
+                            <FieldLabel className="lg:text-base" htmlFor="birthDate">{t("birthDateField")}<span className="text-destructive">*</span></FieldLabel>
                             <DateInput {...field} id="birthDate" />
                         </div>
                         <div className="flex flex-col gap-2">
@@ -125,7 +125,7 @@ export default function NewStudentForm() {
                         control={form.control}
                         render={({ field }) => (
                             <Field className="flex flex-col gap-2">
-                                <FieldLabel className="lg:text-base" htmlFor="responsibleName">{t("responsibleNameField")} *</FieldLabel>
+                                <FieldLabel className="lg:text-base" htmlFor="responsibleName">{t("responsibleNameField")}<span className="text-destructive">*</span></FieldLabel>
                                 <Input {...field} id="responsibleName" className="text-sm lg:text-base" />
                             </Field>
                         )}
@@ -136,7 +136,7 @@ export default function NewStudentForm() {
                         control={form.control}
                         render={({ field }) => (
                             <Field className="flex flex-col gap-2">
-                                <FieldLabel className="lg:text-base" htmlFor="responsiblePhoneNumber">{t("responsiblePhoneNumberField")} *</FieldLabel>
+                                <FieldLabel className="lg:text-base" htmlFor="responsiblePhoneNumber">{t("responsiblePhoneNumberField")}<span className="text-destructive">*</span></FieldLabel>
                                 <Input {...field} id="responsiblePhoneNumber" className="text-sm lg:text-base" />
                             </Field>
 
@@ -149,7 +149,7 @@ export default function NewStudentForm() {
                     control={form.control}
                     render={({ field }) => (
                         <Field className="flex flex-col gap-2">
-                            <FieldLabel className="lg:text-base" htmlFor="studentPhoneNumber">{t("studentPhoneNumberField")} *</FieldLabel>
+                            <FieldLabel className="lg:text-base" htmlFor="studentPhoneNumber">{t("studentPhoneNumberField")}<span className="text-destructive">*</span></FieldLabel>
                             <Input {...field} id="studentPhoneNumber" className="text-sm lg:text-base" />
                         </Field>
                     )}
@@ -172,7 +172,7 @@ export default function NewStudentForm() {
                 control={form.control}
                 render={({ field }) => (
                     <Field className="flex flex-col gap-2">
-                        <FieldLabel className="lg:text-base" htmlFor="address">{t("addressField")} *</FieldLabel>
+                        <FieldLabel className="lg:text-base" htmlFor="address">{t("addressField")}<span className="text-destructive">*</span></FieldLabel>
                         <Input {...field} id="address" className="text-sm lg:text-base" />
                     </Field>
                 )}
