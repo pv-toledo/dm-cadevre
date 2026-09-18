@@ -5,12 +5,14 @@ import { Input } from "@/components/ui/input";
 import React from "react";
 import { toast } from "@/components/ui/toast";
 import { convertToWebp } from "@/lib/image";
-
+import { v7 as uuidv7 } from "uuid"
+import { createClient } from "@/lib/supabase/client";
+import { uploadImage } from "../students/actions";
 type AvatarUploadInputProps = {
-  onUpload?: (path:string) => void
+  onUpload?: (path: string) => void
 }
 
-export function AvatarUploadInput({onUpload}: AvatarUploadInputProps) {
+export function AvatarUploadInput({ onUpload }: AvatarUploadInputProps) {
 
   async function handleUpload(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0]
@@ -19,10 +21,31 @@ export function AvatarUploadInput({onUpload}: AvatarUploadInputProps) {
 
     const webpFile = await convertToWebp(file)
 
-    toast.add({
-      type: "success",
-      description: webpFile.name
-    })
+    await uploadImage(webpFile)
+
+    // const supabase = createClient()
+
+    // const filePath = `${uuidv7()}.webp`;
+
+    // const { data, error } = await supabase.storage
+    //   .from("avatars")
+    //   .upload(filePath, webpFile);
+
+    // console.log({ data, error });
+
+    // if (error) {
+    //   toast.add({
+    //     type: "error",
+    //     description: error.message,
+    //   });
+    //   return;
+    // }
+
+
+    // toast.add({
+    //   type: "success",
+    //   description: "Upload realizado com sucesso",
+    // });
   }
 
   return (

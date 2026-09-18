@@ -4,8 +4,10 @@ import prisma from "@/lib/prisma";
 import { Prisma } from "@/generated/prisma/client";
 import { calculateAge } from "@/lib/utils";
 import { NewStudentFormData } from "../_components/new-student-form";
-import { createClient } from "@/lib/supabase/client";
-import {v7 as uuidv7} from "uuid"
+
+import { v7 as uuidv7 } from "uuid"
+import { createClient } from "@supabase/supabase-js"
+import { env } from "@/lib/env";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
@@ -33,6 +35,7 @@ export async function createStudent(data: NewStudentFormData) {
 }
 
 export async function uploadImage(file: File) {
+
   try {
     if (!file) {
       throw new Error("Arquivo é obrigatório");
@@ -46,7 +49,10 @@ export async function uploadImage(file: File) {
       throw new Error("Arquivo excede 10MB");
     }
 
-    const supabase = createClient();
+    const supabase = createClient(
+      env.SUPABASE_URL,
+      env.SECRET_KEY
+    )
 
     const filePath = `${uuidv7()}.webp`;
 
@@ -78,4 +84,3 @@ export async function uploadImage(file: File) {
     };
   }
 }
-``
