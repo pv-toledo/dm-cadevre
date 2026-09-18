@@ -21,6 +21,7 @@ const newStudentFormSchema = z
         responsiblePhoneNumber: z.string().optional(),
         church: z.string().optional(),
         address: z.string().min(1, "Insira um endereço válido"),
+        photoPath: z.string().optional()
     })
     .superRefine((data, context) => {
         const age = calculateAge(data.birthDate)

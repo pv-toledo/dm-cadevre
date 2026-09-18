@@ -4,6 +4,10 @@ import prisma from "@/lib/prisma";
 import { Prisma } from "@/generated/prisma/client";
 import { calculateAge } from "@/lib/utils";
 import { NewStudentFormData } from "../_components/new-student-form";
+import { createClient } from "@/lib/supabase/client";
+import {v7 as uuidv7} from "uuid"
+
+const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
 export async function createStudent(data: NewStudentFormData) {
   const isMinor = calculateAge(data.birthDate) < 18
@@ -27,3 +31,51 @@ export async function createStudent(data: NewStudentFormData) {
   }
 
 }
+
+export async function uploadImage(file: File) {
+  try {
+    if (!file) {
+      throw new Error("Arquivo é obrigatório");
+    }
+
+    if (!file.type.startsWith("image/")) {
+      throw new Error("Arquivo inválido");
+    }
+
+    if (file.size > MAX_FILE_SIZE) {
+      throw new Error("Arquivo excede 10MB");
+    }
+
+    const supabase = createClient();
+
+    const filePath = `${uuidv7()}.webp`;
+
+    const { error } = await supabase.storage
+      .from("avatars")
+      .upload(filePath, file, {
+        cacheControl: "3600",
+        upsert: false,
+      });
+
+    if (error) throw error;
+
+    const { data } = supabase.storage
+      .from("avatars")
+      .getPublicUrl(filePath);
+
+    return {
+      data: {
+        path: filePath,
+        publicUrl: data.publicUrl,
+      },
+    };
+  } catch (error) {
+    return {
+      error:
+        error instanceof Error
+          ? error.message
+          : "Erro desconhecido ao enviar imagem",
+    };
+  }
+}
+``
