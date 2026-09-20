@@ -1,18 +1,18 @@
 "use client"
 
-import { Plus } from "lucide-react";
+import { Plus, User } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import React from "react";
-import { toast } from "@/components/ui/toast";
 import { convertToWebp } from "@/lib/image";
-import { v7 as uuidv7 } from "uuid"
-import { createClient } from "@/lib/supabase/client";
 import { uploadImage } from "../students/actions";
+
 type AvatarUploadInputProps = {
-  onUpload?: (path: string) => void
+
+studentNameInitials: string | null
+
 }
 
-export function AvatarUploadInput({ onUpload }: AvatarUploadInputProps) {
+export function AvatarUploadInput({studentNameInitials}: AvatarUploadInputProps) {
 
   async function handleUpload(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0]
@@ -23,37 +23,15 @@ export function AvatarUploadInput({ onUpload }: AvatarUploadInputProps) {
 
     await uploadImage(webpFile)
 
-    // const supabase = createClient()
-
-    // const filePath = `${uuidv7()}.webp`;
-
-    // const { data, error } = await supabase.storage
-    //   .from("avatars")
-    //   .upload(filePath, webpFile);
-
-    // console.log({ data, error });
-
-    // if (error) {
-    //   toast.add({
-    //     type: "error",
-    //     description: error.message,
-    //   });
-    //   return;
-    // }
-
-
-    // toast.add({
-    //   type: "success",
-    //   description: "Upload realizado com sucesso",
-    // });
   }
 
   return (
     <div className="relative aspect-square w-36 rounded-full md:w-48 lg:w-64">
       <div className="flex size-full items-center justify-center rounded-full bg-muted">
-        <p className="text-3xl text-muted-foreground md:text-5xl lg:text-6xl">
-          AS
-        </p>
+        {/* <p className="text-3xl text-muted-foreground md:text-5xl lg:text-6xl">
+          {studentNameInitials === "UNDEFINEDUNDEFINED" ? "DM" : studentNameInitials}
+        </p> */}
+        <User strokeWidth={4} nonScalingStroke className="size-18 md:size-24 lg:size-28 text-muted-foreground"/>
       </div>
 
       <Input
