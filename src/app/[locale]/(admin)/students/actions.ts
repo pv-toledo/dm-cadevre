@@ -50,8 +50,8 @@ export async function uploadImage(file: File) {
     }
 
     const supabase = createClient(
-      env.SUPABASE_URL,
-      env.SECRET_KEY
+      env.NEXT_PUBLIC_SUPABASE_URL,
+      env.NEXT_PUBLIC_SECRET_KEY
     )
 
     const filePath = `${uuidv7()}.webp`;
@@ -65,14 +65,16 @@ export async function uploadImage(file: File) {
 
     if (error) throw error;
 
-    const { data } = supabase.storage
+    const { data, error: signedUrlError} = await supabase.storage
       .from("avatars")
-      .getPublicUrl(filePath);
+      .createSignedUrl(filePath, 60*60);
+
+      if (signedUrlError) throw signedUrlError;
 
     return {
       data: {
         path: filePath,
-        publicUrl: data.publicUrl,
+        signedUrl: data.signedUrl,
       },
     };
   } catch (error) {
