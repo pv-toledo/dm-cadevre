@@ -2,36 +2,71 @@
 
 import { Plus, User } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import React from "react";
+import React, { useState } from "react";
 import { convertToWebp } from "@/lib/image";
 import { uploadImage } from "../students/actions";
+import Image from "next/image";
+import { toast } from "@/components/ui/toast";
+
+const notSupportedTypes = [
+  "HEIC",
+  "HEIF"
+]
 
 type AvatarUploadInputProps = {
-
-studentNameInitials: string | null
-
+  onChange: (file?: File) => void
 }
 
-export function AvatarUploadInput({studentNameInitials}: AvatarUploadInputProps) {
+export function AvatarUploadInput({onChange}: AvatarUploadInputProps) {
+
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
 
   async function handleUpload(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0]
 
     if (!file) return
 
-    const webpFile = await convertToWebp(file)
+    const extension = file.name.split(".").pop()?.toUpperCase()
 
-    await uploadImage(webpFile)
+    if (extension && notSupportedTypes.includes(extension)) {
+      toast.add({
+        type: "error",
+        description: `${extension} files are no supported`
+      })
+
+      return
+    }
+
+    onChange(file)
+
+    setAvatarUrl(URL.createObjectURL(file))
+
+
+
+    // const webpFile = await convertToWebp(file)
+
+    // const result = await uploadImage(webpFile)
+
+    // if (result.data?.signedUrl) {
+    //   setAvatarUrl(result.data.signedUrl)
+    // }
 
   }
 
   return (
     <div className="relative aspect-square w-36 rounded-full md:w-48 lg:w-64">
-      <div className="flex size-full items-center justify-center rounded-full bg-muted">
-        {/* <p className="text-3xl text-muted-foreground md:text-5xl lg:text-6xl">
-          {studentNameInitials === "UNDEFINEDUNDEFINED" ? "DM" : studentNameInitials}
-        </p> */}
-        <User strokeWidth={4} nonScalingStroke className="size-18 md:size-24 lg:size-28 text-muted-foreground"/>
+      <div className="relative size-full flex items-center justify-center overflow-hidden rounded-full bg-muted">
+        {avatarUrl ? (
+          <Image
+            src={avatarUrl}
+            alt="student profile picture"
+            fill
+            sizes="100vw"
+            className="object-cover"
+          />
+        ) : (
+          <User strokeWidth={4} nonScalingStroke className="size-18 md:size-24 lg:size-28 text-muted-foreground" />
+        )}
       </div>
 
       <Input

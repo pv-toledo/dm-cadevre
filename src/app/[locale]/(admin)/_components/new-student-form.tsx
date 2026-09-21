@@ -3,8 +3,8 @@
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
-import { calculateAge, getInitials } from "@/lib/utils";
-import { createStudent } from "../students/actions";
+import { calculateAge } from "@/lib/utils";
+import { createStudent, uploadImage } from "../students/actions";
 import { toast } from "@/components/ui/toast";
 import { useTranslations } from "next-intl";
 import { Field, FieldLabel } from "@/components/ui/field";
@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { DateInput } from "./date-input";
 import { AvatarUploadInput } from "./avatar-upload-input";
+import { convertToWebp } from "@/lib/image";
 
 const newStudentFormSchema = z
   .object({
@@ -22,6 +23,7 @@ const newStudentFormSchema = z
     responsiblePhoneNumber: z.string().optional(),
     church: z.string().optional(),
     address: z.string().min(1, "Insira um endereço válido"),
+    photo: z.instanceof(File).optional(),
     photoPath: z.string().optional(),
   })
   .superRefine((data, context) => {
@@ -73,15 +75,28 @@ export default function NewStudentForm() {
   const birthDate = form.watch("birthDate");
   const studentAge = birthDate ? calculateAge(birthDate) : undefined;
 
-  const studentNameInitials = getInitials(form.watch("name"))
-
   async function handleSubmit(data: NewStudentFormData) {
     try {
-      await createStudent(data);
+      let photoPath: string | undefined
+
+      if (data.photo) {
+        const webpFile = await convertToWebp(data.photo)
+        const result = await uploadImage(webpFile)
+        photoPath = result.data?.path
+      }
+
+      const {photo, ...studentData} = data
+
+      await createStudent({
+        ...studentData,
+        photoPath
+      });
+
       toast.add({
         type: "success",
         description: t("successToastMessage"),
       });
+
     } catch {
       toast.add({
         type: "error",
@@ -239,9 +254,15 @@ export default function NewStudentForm() {
             : t("submitButtonDefault")}
         </Button>
       </div>
-      <div className="flex h-full items-start justify-center order-1 lg:order-2">
-        <AvatarUploadInput studentNameInitials={studentNameInitials}/>
-      </div>
+      <Controller
+        name="photo"
+        control={form.control}
+        render={({ field }) => (
+          <div className="flex h-full items-start justify-center order-1 lg:order-2">
+            <AvatarUploadInput onChange={field.onChange} />
+          </div>
+        )}
+      />
     </form>
   );
 }
