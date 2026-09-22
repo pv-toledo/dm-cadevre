@@ -3,8 +3,6 @@
 import { Plus, User } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import React, { useState } from "react";
-import { convertToWebp } from "@/lib/image";
-import { uploadImage } from "../students/actions";
 import Image from "next/image";
 import { toast } from "@/components/ui/toast";
 
@@ -40,17 +38,6 @@ export function AvatarUploadInput({onChange}: AvatarUploadInputProps) {
     onChange(file)
 
     setAvatarUrl(URL.createObjectURL(file))
-
-
-
-    // const webpFile = await convertToWebp(file)
-
-    // const result = await uploadImage(webpFile)
-
-    // if (result.data?.signedUrl) {
-    //   setAvatarUrl(result.data.signedUrl)
-    // }
-
   }
 
   return (
