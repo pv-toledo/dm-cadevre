@@ -2,7 +2,7 @@ import { Avatar, AvatarBadge, AvatarFallback, AvatarImage } from "@/components/u
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Prisma, } from "@/generated/prisma/client";
-import { calculateAge, cn, getInitials } from "@/lib/utils";
+import { calculateAge, cn, formatPhoneNumber, getInitials } from "@/lib/utils";
 import { getTranslations } from "next-intl/server";
 import { getStudentProfilePicture } from "../students/actions";
 
@@ -61,7 +61,7 @@ export default async function StudentCard({
             </span>
             <span>•</span>
             <span>
-              {student.studentPhoneNumber ? student.studentPhoneNumber : student.responsiblePhoneNumber}
+              {student.studentPhoneNumber ? formatPhoneNumber(student.studentPhoneNumber) : formatPhoneNumber(student.responsiblePhoneNumber)}
             </span>
           </div>
         </div>

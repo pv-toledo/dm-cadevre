@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { DateInput } from "./date-input";
 import { AvatarUploadInput } from "./avatar-upload-input";
 import { convertToWebp } from "@/lib/image";
-import prisma from "@/lib/prisma";
+import {PatternFormat} from "react-number-format"
 
 const newStudentFormSchema = z
   .object({
@@ -190,10 +190,14 @@ export default function NewStudentForm() {
                     {t("responsiblePhoneNumberField")}
                     <span className="text-destructive">*</span>
                   </FieldLabel>
-                  <Input
-                    {...field}
-                    id="responsiblePhoneNumber"
-                    className="text-sm lg:text-base"
+                  <PatternFormat
+                    format="(##) #####-####"
+                    mask="_"
+                    value={field.value}
+                    getInputRef={field.ref}
+                    onValueChange={(values) => {field.onChange(values.value)}}
+                    customInput={Input}
+                    placeholder="(00) 00000-0000"
                   />
                 </Field>
               )}
@@ -212,11 +216,15 @@ export default function NewStudentForm() {
                   {t("studentPhoneNumberField")}
                   <span className="text-destructive">*</span>
                 </FieldLabel>
-                <Input
-                  {...field}
-                  id="studentPhoneNumber"
-                  className="text-sm lg:text-base"
-                />
+                <PatternFormat
+                    format="(##) #####-####"
+                    mask="_"
+                    value={field.value}
+                    getInputRef={field.ref}
+                    onValueChange={(values) => {field.onChange(values.value)}}
+                    customInput={Input}
+                    placeholder="(00) 00000-0000"
+                  />
               </Field>
             )}
           />

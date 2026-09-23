@@ -45,7 +45,7 @@ export default async function StudentsPage({ searchParams }: { searchParams: Pro
             </Button>
           </Link>
         </div>
-        <h2 className="font-display text-secondary-foreground">{t("description")}</h2>
+        <h2 className="font-display text-secondary-foreground mt-2 lg:mt-0">{t("description")}</h2>
       </div>
       <StudentsFilter />
       <section className="grid lg:grid-cols-2 2xl:grid-cols-3 gap-5">

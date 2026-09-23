@@ -17,3 +17,13 @@ export function getInitials(fullName: string): string {
 
   return `${names[0][0]}${names[names.length - 1][0]}`.toUpperCase()
 }
+
+export function formatPhoneNumber (phoneNumber: string | null) {
+
+  if (!phoneNumber) return ""
+
+  const digits = phoneNumber.replace(/\D/g,"")
+  const formattedPhoneNumber = digits.replace(/(\d{2})(\d)/, "($1) $2").replace(/(\d{5})(\d)/, "$1-$2").slice(0, 15)
+
+  return formattedPhoneNumber
+}
