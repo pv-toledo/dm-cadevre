@@ -1,7 +1,5 @@
 import { getTranslations } from "next-intl/server";
 import NewStudentForm from "../../_components/new-student-form";
-import { AvatarUploadInput } from "../../_components/avatar-upload-input";
-
 
 export default async function NewStudentPage() {
     const t = await getTranslations("NewStudentPage")

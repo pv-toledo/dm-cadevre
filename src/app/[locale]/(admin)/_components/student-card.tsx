@@ -1,9 +1,10 @@
-import { Avatar, AvatarBadge, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarBadge, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Prisma, } from "@/generated/prisma/client";
 import { calculateAge, cn, getInitials } from "@/lib/utils";
 import { getTranslations } from "next-intl/server";
+import { getStudentProfilePicture } from "../students/actions";
 
 type StudentWithEnrollmentsAndTuitionPayment = Prisma.StudentGetPayload<{
   include: {
@@ -23,6 +24,7 @@ export default async function StudentCard({
   student
 }: StudentCardProps) {
   const t = await getTranslations("StudentCard");
+  const studentProfilePictureUrl = await getStudentProfilePicture(student.id)
   const studentAge = calculateAge(student.birthDate);
 
   return (
@@ -36,6 +38,7 @@ export default async function StudentCard({
     >
       <CardContent className="flex flex-row gap-3 items-center">
         <Avatar size="lg">
+          <AvatarImage src={studentProfilePictureUrl} />
           <AvatarFallback>{getInitials(student.name)}</AvatarFallback>
           <AvatarBadge
             className={cn(

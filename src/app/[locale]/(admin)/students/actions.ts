@@ -43,7 +43,7 @@ export async function updateStudentPhotoPath(studentId: string, studentPhotoPath
       }
     })
     return updatedStudent
-    
+
   } catch (error) {
     throw new Error("Error updating student photo path", { cause: error })
   }
@@ -80,11 +80,11 @@ export async function uploadImage(file: File, studentId: string) {
 
     if (error) throw error;
 
-    const { data, error: signedUrlError} = await supabase.storage
+    const { data, error: signedUrlError } = await supabase.storage
       .from("avatars")
-      .createSignedUrl(filePath, 60*60);
+      .createSignedUrl(filePath, 60 * 60);
 
-      if (signedUrlError) throw signedUrlError;
+    if (signedUrlError) throw signedUrlError;
 
     return {
       data: {
@@ -100,4 +100,29 @@ export async function uploadImage(file: File, studentId: string) {
           : "Erro desconhecido ao enviar imagem",
     };
   }
+}
+
+export async function getStudentProfilePicture(studentId: string) {
+  const student = await prisma.student.findUnique({
+    where: {
+      id: studentId
+    }
+  })
+
+  if (!student) {
+    throw new Error("Student not found")
+  }
+
+  if (!student.photoPath) return undefined
+
+  const supabase = createClient(
+    env.NEXT_PUBLIC_SUPABASE_URL,
+    env.NEXT_PUBLIC_SECRET_KEY
+  )
+
+  const { data, error } = await supabase.storage.from("avatars").createSignedUrl(student.photoPath, 60 * 60)
+
+  if (error) throw error
+
+  return data.signedUrl
 }
