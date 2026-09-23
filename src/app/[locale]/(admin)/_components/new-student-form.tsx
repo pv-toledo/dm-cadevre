@@ -65,11 +65,14 @@ export default function NewStudentForm() {
     resolver: zodResolver(newStudentFormSchema),
     defaultValues: {
       name: "",
+      birthDate: undefined,
       studentPhoneNumber: "",
       responsibleName: "",
       responsiblePhoneNumber: "",
       church: "",
       address: "",
+      photo: undefined,
+      photoPath: undefined
     },
   });
 
@@ -87,7 +90,7 @@ export default function NewStudentForm() {
         const webpFile = await convertToWebp(data.photo)
         const result = await uploadImage(webpFile, newStudent.id)
         if (result.data?.path) {
-          const updatedStudent = await updateStudentPhotoPath(newStudent.id, result.data.path)
+          await updateStudentPhotoPath(newStudent.id, result.data.path)
         }
       }
 
@@ -95,6 +98,8 @@ export default function NewStudentForm() {
         type: "success",
         description: t("successToastMessage"),
       });
+
+      form.reset()
 
     } catch {
       toast.add({
@@ -140,7 +145,7 @@ export default function NewStudentForm() {
                   {t("birthDateField")}
                   <span className="text-destructive">*</span>
                 </FieldLabel>
-                <DateInput {...field} id="birthDate" />
+                <DateInput {...field} value={field.value} id="birthDate" />
               </div>
               <div className="flex flex-col gap-2">
                 <FieldLabel>{t("ageField")}</FieldLabel>
@@ -258,7 +263,7 @@ export default function NewStudentForm() {
         control={form.control}
         render={({ field }) => (
           <div className="flex h-full items-start justify-center order-1 lg:order-2">
-            <AvatarUploadInput onChange={field.onChange} />
+            <AvatarUploadInput value={field.value} onChange={field.onChange} />
           </div>
         )}
       />

@@ -2,7 +2,7 @@
 
 import { Plus, User } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { toast } from "@/components/ui/toast";
 
@@ -12,12 +12,18 @@ const notSupportedTypes = [
 ]
 
 type AvatarUploadInputProps = {
+  value?: File
   onChange: (file?: File) => void
 }
 
-export function AvatarUploadInput({onChange}: AvatarUploadInputProps) {
+export function AvatarUploadInput({value, onChange}: AvatarUploadInputProps) {
 
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
+  useEffect(() => {
+    if (!value) {
+      setAvatarUrl(null)
+    }
+  }, [value])
 
   async function handleUpload(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0]

@@ -15,10 +15,11 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 type DateInputProps = {
   id: string,
+  value?: Date
   onChange: (date?: Date) => void
 }
 
@@ -35,11 +36,22 @@ export function parseDate(text: string) {
   return isValid(date) ? date : undefined
 }
 
-export function DateInput({ id, onChange }: DateInputProps) {
+export function DateInput({ id, value, onChange }: DateInputProps) {
   const [open, setOpen] = useState(false)
   const [text, setText] = useState("")
   const [month, setMonth] = useState<Date>()
-  
+
+  useEffect(() => {
+    if (!value) {
+      setText("")
+      setMonth(undefined)
+      return
+    }
+
+    setText(format(value, "dd/MM/yyyy"))
+    setMonth(value)
+  }, [value])
+
 
   const date = parseDate(text)
 
@@ -59,7 +71,7 @@ export function DateInput({ id, onChange }: DateInputProps) {
               const parsed = parseDate(next)
               if (parsed) {
                 setMonth(parsed)
-                
+
               }
 
               onChange(parsed)
