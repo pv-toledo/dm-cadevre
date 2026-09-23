@@ -4,7 +4,7 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
 import { calculateAge } from "@/lib/utils";
-import { createStudent, uploadImage } from "../students/actions";
+import { createStudent, updateStudentPhotoPath, uploadImage } from "../students/actions";
 import { toast } from "@/components/ui/toast";
 import { useTranslations } from "next-intl";
 import { Field, FieldLabel } from "@/components/ui/field";
@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { DateInput } from "./date-input";
 import { AvatarUploadInput } from "./avatar-upload-input";
 import { convertToWebp } from "@/lib/image";
+import prisma from "@/lib/prisma";
 
 const newStudentFormSchema = z
   .object({
@@ -77,20 +78,18 @@ export default function NewStudentForm() {
 
   async function handleSubmit(data: NewStudentFormData) {
     try {
-      let photoPath: string | undefined
+
+      const { photo, ...studentData } = data
+
+      const newStudent = await createStudent(studentData);
 
       if (data.photo) {
         const webpFile = await convertToWebp(data.photo)
-        const result = await uploadImage(webpFile)
-        photoPath = result.data?.path
+        const result = await uploadImage(webpFile, newStudent.id)
+        if (result.data?.path) {
+          const updatedStudent = await updateStudentPhotoPath(newStudent.id, result.data.path)
+        }
       }
-
-      const {photo, ...studentData} = data
-
-      await createStudent({
-        ...studentData,
-        photoPath
-      });
 
       toast.add({
         type: "success",

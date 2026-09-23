@@ -4,8 +4,6 @@ import prisma from "@/lib/prisma";
 import { Prisma } from "@/generated/prisma/client";
 import { calculateAge } from "@/lib/utils";
 import { NewStudentFormData } from "../_components/new-student-form";
-
-import { v7 as uuidv7 } from "uuid"
 import { createClient } from "@supabase/supabase-js"
 import { env } from "@/lib/env";
 
@@ -34,7 +32,24 @@ export async function createStudent(data: NewStudentFormData) {
 
 }
 
-export async function uploadImage(file: File) {
+export async function updateStudentPhotoPath(id: string, photoPath: string) {
+  try {
+    const updatedStudent = await prisma.student.update({
+      where: {
+        id
+      },
+      data: {
+        photoPath
+      }
+    })
+    return updatedStudent
+    
+  } catch (error) {
+    throw new Error("Error updating student photo path", { cause: error })
+  }
+}
+
+export async function uploadImage(file: File, studentId: string) {
 
   try {
     if (!file) {
@@ -54,7 +69,7 @@ export async function uploadImage(file: File) {
       env.NEXT_PUBLIC_SECRET_KEY
     )
 
-    const filePath = `${uuidv7()}.webp`;
+    const filePath = `${studentId}/${file.name}}`;
 
     const { error } = await supabase.storage
       .from("avatars")

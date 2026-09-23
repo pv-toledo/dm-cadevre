@@ -34,10 +34,10 @@ export async function convertToWebp(file: File): Promise<File> {
             return;
           }
 
-          const originalName = file.name.replace(/\.[^/.]+$/, "");
+          // const originalName = file.name.replace(/\.[^/.]+$/, "");
 
           resolve(
-            new File([blob], `${originalName}.webp`, {
+            new File([blob], "profile.webp", {
               type: "image/webp",
             })
           );
