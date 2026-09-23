@@ -32,14 +32,14 @@ export async function createStudent(data: NewStudentFormData) {
 
 }
 
-export async function updateStudentPhotoPath(id: string, photoPath: string) {
+export async function updateStudentPhotoPath(studentId: string, studentPhotoPath: string) {
   try {
     const updatedStudent = await prisma.student.update({
       where: {
-        id
+        id: studentId
       },
       data: {
-        photoPath
+        photoPath: studentPhotoPath
       }
     })
     return updatedStudent
@@ -69,7 +69,7 @@ export async function uploadImage(file: File, studentId: string) {
       env.NEXT_PUBLIC_SECRET_KEY
     )
 
-    const filePath = `${studentId}/${file.name}}`;
+    const filePath = `${studentId}/${file.name}`;
 
     const { error } = await supabase.storage
       .from("avatars")
