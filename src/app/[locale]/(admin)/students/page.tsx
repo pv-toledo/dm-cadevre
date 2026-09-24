@@ -32,6 +32,13 @@ export default async function StudentsPage({ searchParams }: { searchParams: Pro
     }
   });
 
+  const courses = await prisma.classPlan.findMany({
+    include: {
+      course: true,
+      modality: true
+    }
+  })
+
   const t = await getTranslations("StudentsPage");
   return (
     <div className="flex flex-col gap-10 mt-8 lg:mt-12">

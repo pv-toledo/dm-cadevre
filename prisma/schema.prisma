@@ -75,9 +75,16 @@ model Modality {
   @@map("modalities")
 }
 
+enum ClassPlanStatus {
+  ACTIVE
+  INACTIVE
+  @@map("class_plan_status")
+}
+
 model ClassPlan {
   id String @id @default(uuid()) @db.Uuid
   courseId String @db.Uuid @map("course_id")
+  status ClassPlanStatus @default(ACTIVE)
   modalityType ModalityType @map("modality_type")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
