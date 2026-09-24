@@ -30,14 +30,7 @@ export default async function StudentsPage({ searchParams }: { searchParams: Pro
     orderBy: {
       name: "asc"
     }
-  });
-
-  const courses = await prisma.classPlan.findMany({
-    include: {
-      course: true,
-      modality: true
-    }
-  })
+  }); 
 
   const t = await getTranslations("StudentsPage");
   return (

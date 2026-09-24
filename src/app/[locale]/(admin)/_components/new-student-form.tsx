@@ -13,7 +13,20 @@ import { Button } from "@/components/ui/button";
 import { DateInput } from "./date-input";
 import { AvatarUploadInput } from "./avatar-upload-input";
 import { convertToWebp } from "@/lib/image";
-import {PatternFormat} from "react-number-format"
+import { PatternFormat } from "react-number-format"
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Prisma } from "@/generated/prisma/client";
+import { useState } from "react";
+
+type CoursesWithClassPlans = Prisma.CourseGetPayload<{
+  include: {
+    classPlans: true
+  }
+}>[]
+
+type NewStudentFormProps = {
+  activeCourses: CoursesWithClassPlans
+}
 
 const newStudentFormSchema = z
   .object({
@@ -26,6 +39,8 @@ const newStudentFormSchema = z
     address: z.string().min(1, "Insira um endereço válido"),
     photo: z.instanceof(File).optional(),
     photoPath: z.string().optional(),
+    course: z.string(),
+    modality: z.string()
   })
   .superRefine((data, context) => {
     const age = calculateAge(data.birthDate);
@@ -60,7 +75,10 @@ const newStudentFormSchema = z
 
 export type NewStudentFormData = z.infer<typeof newStudentFormSchema>;
 
-export default function NewStudentForm() {
+export default function NewStudentForm({ activeCourses }: NewStudentFormProps) {
+
+  const [availableModalities, setAvailableModalities] = useState<string[] | null>(null)
+
   const form = useForm<NewStudentFormData>({
     resolver: zodResolver(newStudentFormSchema),
     defaultValues: {
@@ -72,7 +90,9 @@ export default function NewStudentForm() {
       church: "",
       address: "",
       photo: undefined,
-      photoPath: undefined
+      photoPath: undefined,
+      course: "",
+      modality: ""
     },
   });
 
@@ -109,7 +129,19 @@ export default function NewStudentForm() {
     }
   }
 
-  const t = useTranslations("NewStudentPage");
+  function getSelectedCourseModalities(course: string | null) {
+    if (!course) return null
+
+    const selectedCourse = activeCourses.find(c => c.name === course)
+
+    if (!selectedCourse) return null
+
+    const availableModalities = selectedCourse.classPlans.map((cp) => cp.modalityType)
+
+    setAvailableModalities(availableModalities)
+  }
+
+  const t = useTranslations("NewStudentPage")
   return (
     <form
       onSubmit={form.handleSubmit(handleSubmit)}
@@ -195,7 +227,7 @@ export default function NewStudentForm() {
                     mask="_"
                     value={field.value}
                     getInputRef={field.ref}
-                    onValueChange={(values) => {field.onChange(values.value)}}
+                    onValueChange={(values) => { field.onChange(values.value) }}
                     customInput={Input}
                     placeholder="(00) 00000-0000"
                   />
@@ -217,14 +249,14 @@ export default function NewStudentForm() {
                   <span className="text-destructive">*</span>
                 </FieldLabel>
                 <PatternFormat
-                    format="(##) #####-####"
-                    mask="_"
-                    value={field.value}
-                    getInputRef={field.ref}
-                    onValueChange={(values) => {field.onChange(values.value)}}
-                    customInput={Input}
-                    placeholder="(00) 00000-0000"
-                  />
+                  format="(##) #####-####"
+                  mask="_"
+                  value={field.value}
+                  getInputRef={field.ref}
+                  onValueChange={(values) => { field.onChange(values.value) }}
+                  customInput={Input}
+                  placeholder="(00) 00000-0000"
+                />
               </Field>
             )}
           />
@@ -256,6 +288,61 @@ export default function NewStudentForm() {
             </Field>
           )}
         />
+        <div className="flex gap-8 lg:gap-10">
+          <Controller
+            name="course"
+            control={form.control}
+            render={({ field }) => (
+              <Field className="flex flex-col gap-2">
+                <FieldLabel className="lg:text-base" htmlFor="course">
+                  Curso
+                  <span className="text-destructive">*</span>
+                </FieldLabel>
+                <Select {...field} onValueChange={(value) => {
+                  field.onChange(value)
+                  getSelectedCourseModalities(value)
+                }}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Ex.: Clarinete" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {activeCourses.map((course) => (
+                        <SelectItem key={course.id} value={course.name}>{course.name}</SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </Field>
+            )}
+          />
+          <Controller
+            name="modality"
+            control={form.control}
+            render={({ field }) => (
+              <Field className="flex flex-col gap-2">
+                <FieldLabel className="lg:text-base" htmlFor="modality">
+                  Modalidade
+                  <span className="text-destructive">*</span>
+                </FieldLabel>
+                <Select disabled={availableModalities === null}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Ex.: Coletiva" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {availableModalities && (
+                        availableModalities.map((modality) => (
+                          <SelectItem {...field} key={modality} value={modality}>{modality === "GROUP" ? "Coletiva" : "Individual"}</SelectItem>
+                        ))
+                      )}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </Field>
+            )}
+          />
+        </div>
 
         <Button
           type="submit"

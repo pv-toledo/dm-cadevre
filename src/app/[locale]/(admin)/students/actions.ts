@@ -126,3 +126,23 @@ export async function getStudentProfilePicture(studentId: string) {
 
   return data.signedUrl
 }
+
+export async function getActiveCourses () {
+  const courses = await prisma.course.findMany({
+    where: {
+      status: "ACTIVE"
+    },
+    include: {
+      classPlans:true
+    },
+    orderBy: {
+      name: "asc"
+    }
+  })
+
+  if (!courses) {
+    throw new Error("No class plans found")
+  }
+
+  return courses
+}
