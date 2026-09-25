@@ -44,7 +44,11 @@
     "submitButtonDefault": "Register",
     "submitButtonSubmitting": "Registering...",
     "successToastMessage": "Student created successfully",
-    "errorToastMessage": "Error creating student"
+    "errorToastMessage": "Error creating student",
+    "courseField": "Course",
+    "modalityField": "Modality",
+    "groupModality": "Group",
+    "individualModality": "Individual"
   },
   "StudentCard": {
     "overdueStatus": "Overdue",
