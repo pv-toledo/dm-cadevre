@@ -29,7 +29,11 @@
   "StudentsPage": {
     "title": "Students",
     "description": "Music school student management",
-    "newButton": "New student"
+    "newButton": "New student",
+    "breadCrumb": {
+      "home": "Home",
+      "students": "Students"
+    }
   },
   "NewStudentPage": {
     "title": "New student",
@@ -48,7 +52,12 @@
     "courseField": "Course",
     "modalityField": "Modality",
     "groupModality": "Group",
-    "individualModality": "Individual"
+    "individualModality": "Individual",
+    "breadCrumb": {
+      "home": "Home",
+      "students": "Students",
+      "newStudent": "New student"
+    }
   },
   "StudentCard": {
     "overdueStatus": "Overdue",

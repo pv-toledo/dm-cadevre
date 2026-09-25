@@ -35,7 +35,11 @@
   "StudentsPage": {
     "title": "Alunos",
     "description": "Gerenciamento dos alunos matriculados na escola de música",
-    "newButton": "Novo aluno"
+    "newButton": "Novo aluno",
+    "breadCrumb": {
+      "home": "Início",
+      "students": "Alunos"
+    }
   },
 
   "NewStudentPage": {
@@ -55,7 +59,12 @@
     "courseField": "Curso",
     "modalityField": "Modalidade",
     "groupModality": "Coletiva",
-    "individualModality": "Individual"
+    "individualModality": "Individual",
+    "breadCrumb": {
+      "home": "Início",
+      "students": "Alunos",
+      "newStudent": "Novo aluno"
+    }
   },
 
   "StudentCard": {

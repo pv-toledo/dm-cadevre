@@ -7,6 +7,7 @@ import { SearchParams } from "nuqs/server";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { PlusCircleIcon } from "lucide-react";
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 
 export default async function StudentsPage({ searchParams }: { searchParams: Promise<SearchParams> }) {
 
@@ -30,11 +31,24 @@ export default async function StudentsPage({ searchParams }: { searchParams: Pro
     orderBy: {
       name: "asc"
     }
-  }); 
+  });
 
   const t = await getTranslations("StudentsPage");
   return (
-    <div className="flex flex-col gap-10 mt-8 lg:mt-12">
+    <div className="flex flex-col gap-5 mt-5 pb-20 lg:mt-8 lg:gap-6">
+
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/">{t("breadCrumb.home")}</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem className="underline">
+            {t("breadCrumb.students")}
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+
       <div className="flex flex-col gap-1">
         <div className="flex justify-between items-center">
           <h1 className="font-display text-3xl lg:text-4xl">{t("title")}</h1>
@@ -48,7 +62,7 @@ export default async function StudentsPage({ searchParams }: { searchParams: Pro
         <h2 className="font-display text-secondary-foreground mt-2 lg:mt-0">{t("description")}</h2>
       </div>
       <StudentsFilter />
-      <section className="grid lg:grid-cols-2 2xl:grid-cols-3 gap-5">
+      <section className="grid mt-2 lg:mt-5 lg:grid-cols-2 2xl:grid-cols-3 gap-5">
         {students.map((student) => (
           <StudentCard key={student.id} student={student} />
         ))}

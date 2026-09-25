@@ -116,7 +116,7 @@ export default function NewStudentForm({ activeCourses }: NewStudentFormProps) {
         }
       }
 
-      const newEnrollment = await enrollStudent(newStudent.id, data.modality, data.course)
+      await enrollStudent(newStudent.id, data.modality, data.course)
 
       toast.add({
         type: "success",
@@ -146,115 +146,89 @@ export default function NewStudentForm({ activeCourses }: NewStudentFormProps) {
     setAvailableModalities(availableModalities)
   }
 
-    const modalityLabel: Record<string, string> = {
-      GROUP: t("groupModality"),
-      INDIVIDUAL: t("individualModality")
-    } as const
+  const modalityLabel: Record<string, string> = {
+    GROUP: t("groupModality"),
+    INDIVIDUAL: t("individualModality")
+  } as const
 
-    return (
-      <form
-        onSubmit={form.handleSubmit(handleSubmit)}
-        className="grid grid-cols-1 items-center gap-8 pb-20 lg:pb-0 lg:gap-12 lg:grid-cols-[2fr_1fr]"
-      >
-        <div className="flex flex-col gap-3 order-2 lg:order-1">
-          <Controller
-            name="name"
-            control={form.control}
-            render={({ field }) => (
-              <Field className="flex flex-col gap-2">
-                <FieldLabel className="lg:text-base" htmlFor="name">
-                  {t("fullNameField")}
+  return (
+    <form
+      onSubmit={form.handleSubmit(handleSubmit)}
+      className="grid grid-cols-1 items-center gap-8 pb-20 lg:pb-0 lg:gap-12 lg:grid-cols-[2fr_1fr]"
+    >
+      <div className="flex flex-col gap-3 order-2 lg:order-1">
+        <Controller
+          name="name"
+          control={form.control}
+          render={({ field }) => (
+            <Field className="flex flex-col gap-2">
+              <FieldLabel className="lg:text-base" htmlFor="name">
+                {t("fullNameField")}
+                <span className="text-destructive">*</span>
+              </FieldLabel>
+              <Input
+                {...field}
+                id="name"
+                autoComplete="off"
+                className="text-sm lg:text-base"
+              />
+            </Field>
+          )}
+        />
+
+        <Controller
+          name="birthDate"
+          control={form.control}
+          render={({ field }) => (
+            <div className="flex gap-5 items-center">
+              <div className="flex flex-col gap-2">
+                <FieldLabel className="lg:text-base" htmlFor="birthDate">
+                  {t("birthDateField")}
                   <span className="text-destructive">*</span>
                 </FieldLabel>
-                <Input
-                  {...field}
-                  id="name"
-                  autoComplete="off"
-                  className="text-sm lg:text-base"
-                />
-              </Field>
-            )}
-          />
-
-          <Controller
-            name="birthDate"
-            control={form.control}
-            render={({ field }) => (
-              <div className="flex gap-5 items-center">
-                <div className="flex flex-col gap-2">
-                  <FieldLabel className="lg:text-base" htmlFor="birthDate">
-                    {t("birthDateField")}
-                    <span className="text-destructive">*</span>
-                  </FieldLabel>
-                  <DateInput {...field} value={field.value} id="birthDate" />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <FieldLabel className="lg:text-base">{t("ageField")}</FieldLabel>
-                  <Input id="age" disabled value={studentAge ?? ""} />
-                </div>
+                <DateInput {...field} value={field.value} id="birthDate" />
               </div>
-            )}
-          />
+              <div className="flex flex-col gap-2">
+                <FieldLabel className="lg:text-base">{t("ageField")}</FieldLabel>
+                <Input id="age" disabled value={studentAge ?? ""} />
+              </div>
+            </div>
+          )}
+        />
 
-          {studentAge && studentAge < 18 ? (
-            <>
-              <Controller
-                name="responsibleName"
-                control={form.control}
-                render={({ field }) => (
-                  <Field className="flex flex-col gap-2">
-                    <FieldLabel
-                      className="lg:text-base"
-                      htmlFor="responsibleName"
-                    >
-                      {t("responsibleNameField")}
-                      <span className="text-destructive">*</span>
-                    </FieldLabel>
-                    <Input
-                      {...field}
-                      id="responsibleName"
-                      className="text-sm lg:text-base"
-                    />
-                  </Field>
-                )}
-              />
-
-              <Controller
-                name="responsiblePhoneNumber"
-                control={form.control}
-                render={({ field }) => (
-                  <Field className="flex flex-col gap-2">
-                    <FieldLabel
-                      className="lg:text-base"
-                      htmlFor="responsiblePhoneNumber"
-                    >
-                      {t("responsiblePhoneNumberField")}
-                      <span className="text-destructive">*</span>
-                    </FieldLabel>
-                    <PatternFormat
-                      format="(##) #####-####"
-                      mask="_"
-                      value={field.value}
-                      getInputRef={field.ref}
-                      onValueChange={(values) => { field.onChange(values.value) }}
-                      customInput={Input}
-                      placeholder="(00) 00000-0000"
-                    />
-                  </Field>
-                )}
-              />
-            </>
-          ) : (
+        {studentAge && studentAge < 18 ? (
+          <>
             <Controller
-              name="studentPhoneNumber"
+              name="responsibleName"
               control={form.control}
               render={({ field }) => (
                 <Field className="flex flex-col gap-2">
                   <FieldLabel
                     className="lg:text-base"
-                    htmlFor="studentPhoneNumber"
+                    htmlFor="responsibleName"
                   >
-                    {t("studentPhoneNumberField")}
+                    {t("responsibleNameField")}
+                    <span className="text-destructive">*</span>
+                  </FieldLabel>
+                  <Input
+                    {...field}
+                    id="responsibleName"
+                    className="text-sm lg:text-base"
+                  />
+                </Field>
+              )}
+            />
+
+            <Controller
+              name="responsiblePhoneNumber"
+              control={form.control}
+              render={({ field }) => (
+                <Field className="flex flex-col gap-2">
+                  <FieldLabel
+                    className="lg:text-base"
+                    htmlFor="responsiblePhoneNumber"
+                  >
+                    {t("responsiblePhoneNumberField")}
                     <span className="text-destructive">*</span>
                   </FieldLabel>
                   <PatternFormat
@@ -265,119 +239,145 @@ export default function NewStudentForm({ activeCourses }: NewStudentFormProps) {
                     onValueChange={(values) => { field.onChange(values.value) }}
                     customInput={Input}
                     placeholder="(00) 00000-0000"
-                    className="text-sm"
                   />
                 </Field>
               )}
             />
-          )}
-
+          </>
+        ) : (
           <Controller
-            name="church"
+            name="studentPhoneNumber"
             control={form.control}
             render={({ field }) => (
               <Field className="flex flex-col gap-2">
-                <FieldLabel className="lg:text-base" htmlFor="church">
-                  {t("churchField")}
-                </FieldLabel>
-                <Input {...field} id="church" className="text-sm lg:text-base" />
-              </Field>
-            )}
-          />
-
-          <Controller
-            name="address"
-            control={form.control}
-            render={({ field }) => (
-              <Field className="flex flex-col gap-2">
-                <FieldLabel className="lg:text-base" htmlFor="address">
-                  {t("addressField")}
+                <FieldLabel
+                  className="lg:text-base"
+                  htmlFor="studentPhoneNumber"
+                >
+                  {t("studentPhoneNumberField")}
                   <span className="text-destructive">*</span>
                 </FieldLabel>
-                <Input {...field} id="address" className="text-sm lg:text-base" />
+                <PatternFormat
+                  format="(##) #####-####"
+                  mask="_"
+                  value={field.value}
+                  getInputRef={field.ref}
+                  onValueChange={(values) => { field.onChange(values.value) }}
+                  customInput={Input}
+                  placeholder="(00) 00000-0000"
+                  className="text-sm"
+                />
               </Field>
             )}
           />
-          <div className="flex gap-8 lg:gap-10">
-            <Controller
-              name="course"
-              control={form.control}
-              render={({ field }) => (
-                <Field className="flex flex-col gap-2">
-                  <FieldLabel className="lg:text-base" htmlFor="course">
-                    {t("courseField")}
-                    <span className="text-destructive">*</span>
-                  </FieldLabel>
-                  <Select {...field} onValueChange={(value) => {
-                    field.onChange(value)
-                    getSelectedCourseModalities(value)
-                  }}>
-                    <SelectTrigger>
-                      <SelectValue>
-                        {field.value ? activeCourses.find((c) => c.id === field.value)?.name : "Ex.: Clarinete"}
-                      </SelectValue>
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        {activeCourses.map((course) => (
-                          <SelectItem key={course.id} value={course.id}>{course.name}</SelectItem>
-                        ))}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                </Field>
-              )}
-            />
-            <Controller
-              name="modality"
-              control={form.control}
-              render={({ field }) => (
-                <Field className="flex flex-col gap-2">
-                  <FieldLabel className="lg:text-base" htmlFor="modality">
-                    {t("modalityField")}
-                    <span className="text-destructive">*</span>
-                  </FieldLabel>
-                  <Select onValueChange={field.onChange} value={field.value} disabled={availableModalities === null}>
-                    <SelectTrigger>
-                      <SelectValue>
-                        {field.value ? modalityLabel[field.value] : "Ex.: Coletiva"}
-                      </SelectValue>
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        {availableModalities && (
-                          availableModalities.map((modality) => (
-                            <SelectItem key={modality} value={modality}>{modalityLabel[modality]}</SelectItem>
-                          ))
-                        )}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                </Field>
-              )}
-            />
-          </div>
+        )}
 
-          <Button
-            type="submit"
-            disabled={!form.formState.isValid || form.formState.isSubmitting}
-            className="mt-5"
-          >
-            {form.formState.isSubmitting
-              ? t("submitButtonSubmitting")
-              : t("submitButtonDefault")}
-          </Button>
-        </div>
         <Controller
-          name="photo"
+          name="church"
           control={form.control}
           render={({ field }) => (
-            <div className="flex h-full items-start justify-center order-1 lg:order-2">
-              <AvatarUploadInput value={field.value} onChange={field.onChange} />
-            </div>
+            <Field className="flex flex-col gap-2">
+              <FieldLabel className="lg:text-base" htmlFor="church">
+                {t("churchField")}
+              </FieldLabel>
+              <Input {...field} id="church" className="text-sm lg:text-base" />
+            </Field>
           )}
         />
-      </form>
-    );
-  }
-  
+
+        <Controller
+          name="address"
+          control={form.control}
+          render={({ field }) => (
+            <Field className="flex flex-col gap-2">
+              <FieldLabel className="lg:text-base" htmlFor="address">
+                {t("addressField")}
+                <span className="text-destructive">*</span>
+              </FieldLabel>
+              <Input {...field} id="address" className="text-sm lg:text-base" />
+            </Field>
+          )}
+        />
+        <div className="flex gap-8 lg:gap-10">
+          <Controller
+            name="course"
+            control={form.control}
+            render={({ field }) => (
+              <Field className="flex flex-col gap-2">
+                <FieldLabel className="lg:text-base" htmlFor="course">
+                  {t("courseField")}
+                  <span className="text-destructive">*</span>
+                </FieldLabel>
+                <Select {...field} onValueChange={(value) => {
+                  field.onChange(value)
+                  getSelectedCourseModalities(value)
+                }}>
+                  <SelectTrigger>
+                    <SelectValue>
+                      {field.value ? activeCourses.find((c) => c.id === field.value)?.name : "Ex.: Clarinete"}
+                    </SelectValue>
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {activeCourses.map((course) => (
+                        <SelectItem key={course.id} value={course.id}>{course.name}</SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </Field>
+            )}
+          />
+          <Controller
+            name="modality"
+            control={form.control}
+            render={({ field }) => (
+              <Field className="flex flex-col gap-2">
+                <FieldLabel className="lg:text-base" htmlFor="modality">
+                  {t("modalityField")}
+                  <span className="text-destructive">*</span>
+                </FieldLabel>
+                <Select onValueChange={field.onChange} value={field.value} disabled={availableModalities === null}>
+                  <SelectTrigger>
+                    <SelectValue>
+                      {field.value ? modalityLabel[field.value] : "Ex.: Coletiva"}
+                    </SelectValue>
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {availableModalities && (
+                        availableModalities.map((modality) => (
+                          <SelectItem key={modality} value={modality}>{modalityLabel[modality]}</SelectItem>
+                        ))
+                      )}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </Field>
+            )}
+          />
+        </div>
+
+        <Button
+          type="submit"
+          disabled={!form.formState.isValid || form.formState.isSubmitting}
+          className="mt-5"
+        >
+          {form.formState.isSubmitting
+            ? t("submitButtonSubmitting")
+            : t("submitButtonDefault")}
+        </Button>
+      </div>
+      <Controller
+        name="photo"
+        control={form.control}
+        render={({ field }) => (
+          <div className="flex h-full items-start justify-center order-1 lg:order-2">
+            <AvatarUploadInput value={field.value} onChange={field.onChange} />
+          </div>
+        )}
+      />
+    </form>
+  );
+}
+
