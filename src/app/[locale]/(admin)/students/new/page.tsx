@@ -20,7 +20,7 @@ export default async function NewStudentPage() {
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />
                     <BreadcrumbItem className="underline">
-                        <span className="text-sidebar">{t("breadCrumb.newStudent")}</span>
+                        {t("breadCrumb.newStudent")}
                     </BreadcrumbItem>
                 </BreadcrumbList>
             </Breadcrumb>
