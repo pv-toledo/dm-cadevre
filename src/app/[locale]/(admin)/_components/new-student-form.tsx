@@ -4,7 +4,7 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
 import { calculateAge } from "@/lib/utils";
-import { createStudent, updateStudentPhotoPath, uploadImage } from "../students/actions";
+import { createStudent, enrollStudent, updateStudentPhotoPath, uploadImage } from "../students/actions";
 import { toast } from "@/components/ui/toast";
 import { useTranslations } from "next-intl";
 import { Field, FieldLabel } from "@/components/ui/field";
@@ -40,7 +40,7 @@ const newStudentFormSchema = z
     photo: z.instanceof(File).optional(),
     photoPath: z.string().optional(),
     course: z.string(),
-    modality: z.string()
+    modality: z.enum(["GROUP", "INDIVIDUAL"])
   })
   .superRefine((data, context) => {
     const age = calculateAge(data.birthDate);
@@ -94,7 +94,7 @@ export default function NewStudentForm({ activeCourses }: NewStudentFormProps) {
       photo: undefined,
       photoPath: undefined,
       course: "",
-      modality: ""
+      modality: "INDIVIDUAL"
     },
   });
 
@@ -104,7 +104,7 @@ export default function NewStudentForm({ activeCourses }: NewStudentFormProps) {
   async function handleSubmit(data: NewStudentFormData) {
     try {
 
-      const { photo, ...studentData } = data
+      const { photo, course, modality, ...studentData } = data
 
       const newStudent = await createStudent(studentData);
 
@@ -116,12 +116,15 @@ export default function NewStudentForm({ activeCourses }: NewStudentFormProps) {
         }
       }
 
+      const newEnrollment = await enrollStudent(newStudent.id, data.modality, data.course)
+
       toast.add({
         type: "success",
         description: t("successToastMessage"),
       });
 
       form.reset()
+      setAvailableModalities(null)
 
     } catch {
       toast.add({
@@ -131,10 +134,10 @@ export default function NewStudentForm({ activeCourses }: NewStudentFormProps) {
     }
   }
 
-  function getSelectedCourseModalities(course: string | null) {
-    if (!course) return null
+  function getSelectedCourseModalities(courseId: string | null) {
+    if (!courseId) return null
 
-    const selectedCourse = activeCourses.find(c => c.name === course)
+    const selectedCourse = activeCourses.find(c => c.id === courseId)
 
     if (!selectedCourse) return null
 
@@ -186,7 +189,7 @@ export default function NewStudentForm({ activeCourses }: NewStudentFormProps) {
                   <DateInput {...field} value={field.value} id="birthDate" />
                 </div>
                 <div className="flex flex-col gap-2">
-                  <FieldLabel>{t("ageField")}</FieldLabel>
+                  <FieldLabel className="lg:text-base">{t("ageField")}</FieldLabel>
                   <Input id="age" disabled value={studentAge ?? ""} />
                 </div>
               </div>
@@ -310,12 +313,14 @@ export default function NewStudentForm({ activeCourses }: NewStudentFormProps) {
                     getSelectedCourseModalities(value)
                   }}>
                     <SelectTrigger>
-                      <SelectValue placeholder="Ex.: Clarinete" />
+                      <SelectValue>
+                        {field.value ? activeCourses.find((c) => c.id === field.value)?.name : "Ex.: Clarinete"}
+                      </SelectValue>
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
                         {activeCourses.map((course) => (
-                          <SelectItem key={course.id} value={course.name}>{course.name}</SelectItem>
+                          <SelectItem key={course.id} value={course.id}>{course.name}</SelectItem>
                         ))}
                       </SelectGroup>
                     </SelectContent>

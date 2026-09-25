@@ -1,15 +1,17 @@
 "use server"
 
 import prisma from "@/lib/prisma";
-import { Prisma } from "@/generated/prisma/client";
 import { calculateAge } from "@/lib/utils";
 import { NewStudentFormData } from "../_components/new-student-form";
 import { createClient } from "@supabase/supabase-js"
 import { env } from "@/lib/env";
+import { ModalityType, Prisma } from "@/generated/prisma/client";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
-export async function createStudent(data: NewStudentFormData) {
+type CreateStudentData = Omit<NewStudentFormData, "photo" | "course" | "modality">
+
+export async function createStudent(data: CreateStudentData) {
   const isMinor = calculateAge(data.birthDate) < 18
 
   const payload: Prisma.StudentCreateInput = {
@@ -127,13 +129,13 @@ export async function getStudentProfilePicture(studentId: string) {
   return data.signedUrl
 }
 
-export async function getActiveCourses () {
+export async function getActiveCourses() {
   const courses = await prisma.course.findMany({
     where: {
       status: "ACTIVE"
     },
     include: {
-      classPlans:true
+      classPlans: true
     },
     orderBy: {
       name: "asc"
@@ -145,4 +147,36 @@ export async function getActiveCourses () {
   }
 
   return courses
+}
+
+export async function enrollStudent(studentId: string, modality: ModalityType, courseId: string) {
+
+  const selectedClassPlan = await prisma.classPlan.findUnique({
+    where: {
+      courseId_modalityType: {
+        courseId: courseId,
+        modalityType: modality
+      }
+    }
+  })
+
+  if (!selectedClassPlan) {
+    throw new Error("Class plan not found")
+  }
+
+  try {
+    const enrollment = await prisma.enrollment.create({
+      data: {
+        studentId: studentId,
+        classPlanId: selectedClassPlan.id,
+        courseId: courseId
+      }
+    })
+
+    return enrollment
+
+  } catch (error) {
+    throw new Error("Error creating enrollment", { cause: error })
+  }
+
 }
