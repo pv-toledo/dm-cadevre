@@ -68,5 +68,11 @@
     "overdueFilter": "Overdue",
     "searchInputPlaceholder": "Search by name",
     "filterLabel": "Filter by"
+  },
+  "SingleStudentPage": {
+    "breadCrumb": {
+      "home": "Home",
+      "students": "Students"
+    }
   }
 }

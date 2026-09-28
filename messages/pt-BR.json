@@ -4,7 +4,6 @@
     "CardTitle": "Login",
     "CardDescription": "Entre com suas credenciais para continuar."
   },
-
   "LoginForm": {
     "EmailInputError": "Insira um email válido",
     "EmailPlaceholder": "seuemail@exemplo.com",
@@ -16,22 +15,18 @@
     "UnexpectedError": "Erro inesperado.",
     "LogingIn": "Entrando..."
   },
-
   "HomePage": {
     "title": "Olá mundo!",
     "body": "Teste"
   },
-
   "AccountMenu": {
     "logout": "Sair",
     "loginOut": "Saindo"
   },
-
   "Sidebar": {
     "title": "Painel de gerenciamento",
     "students": "Alunos"
   },
-
   "StudentsPage": {
     "title": "Alunos",
     "description": "Gerenciamento dos alunos matriculados na escola de música",
@@ -41,7 +36,6 @@
       "students": "Alunos"
     }
   },
-
   "NewStudentPage": {
     "title": "Novo aluno",
     "fullNameField": "Nome completo",
@@ -66,7 +60,6 @@
       "newStudent": "Novo aluno"
     }
   },
-
   "StudentCard": {
     "overdueStatus": "Atrasado",
     "age": "anos"
@@ -76,5 +69,11 @@
     "overdueFilter": "Atrasados",
     "searchInputPlaceholder": "Buscar por nome",
     "filterLabel": "Filtrar por"
+  },
+  "SingleStudentPage": {
+    "breadCrumb": {
+      "home": "Início",
+      "students": "Alunos"
+    }
   }
 }

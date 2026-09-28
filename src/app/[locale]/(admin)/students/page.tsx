@@ -64,7 +64,10 @@ export default async function StudentsPage({ searchParams }: { searchParams: Pro
       <StudentsFilter />
       <section className="grid mt-2 lg:mt-5 lg:grid-cols-2 2xl:grid-cols-3 gap-5">
         {students.map((student) => (
-          <StudentCard key={student.id} student={student} />
+          <Link key={student.id} href={`/students/${student.id}`}>
+            <StudentCard student={student} />
+          </Link>
+
         ))}
       </section>
     </div>

@@ -180,3 +180,17 @@ export async function enrollStudent(studentId: string, modality: ModalityType, c
   }
 
 }
+
+export async function getSingleStudent(id: string) {
+  const student = await prisma.student.findUnique({
+    where: {
+      id
+    }
+  })
+
+  if (!student) {
+    throw new Error("Student not found")
+  }
+
+  return student
+}
