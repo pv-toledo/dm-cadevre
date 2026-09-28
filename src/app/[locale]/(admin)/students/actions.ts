@@ -41,8 +41,9 @@ export async function updateStudentPhotoPath(studentId: string, studentPhotoPath
         id: studentId
       },
       data: {
-        photoPath: studentPhotoPath
-      }
+        photoPath: studentPhotoPath,
+      },
+
     })
     return updatedStudent
 
@@ -77,7 +78,7 @@ export async function uploadImage(file: File, studentId: string) {
       .from("avatars")
       .upload(filePath, file, {
         cacheControl: "3600",
-        upsert: false,
+        upsert: true,
       });
 
     if (error) throw error;

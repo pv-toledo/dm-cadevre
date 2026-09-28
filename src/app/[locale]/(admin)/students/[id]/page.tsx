@@ -1,6 +1,7 @@
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from "@/components/ui/breadcrumb"
 import { getTranslations } from "next-intl/server"
-import { getSingleStudent } from "../actions"
+import { getSingleStudent, getStudentProfilePicture } from "../actions"
+import { AvatarEditInput } from "../../_components/avatar-edit-input"
 
 type SingleStudentPageProps = {
     params: Promise<{ id: string }>
@@ -9,6 +10,7 @@ type SingleStudentPageProps = {
 export default async function SingleStudentPage({ params }: SingleStudentPageProps) {
     const { id } = await params
     const student = await getSingleStudent(id)
+    const studentProfilePicture = await getStudentProfilePicture(student.id)
     const t = await getTranslations("SingleStudentPage")
 
     return (
@@ -28,7 +30,7 @@ export default async function SingleStudentPage({ params }: SingleStudentPagePro
                     </BreadcrumbItem>
                 </BreadcrumbList>
             </Breadcrumb>
-
+            <AvatarEditInput student={student} studentProfilePictureUrl={studentProfilePicture} />
         </div>
     )
 }
