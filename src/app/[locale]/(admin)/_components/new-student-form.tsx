@@ -2,7 +2,6 @@
 
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import z from "zod";
 import { calculateAge } from "@/lib/utils";
 import { createStudent, enrollStudent, updateStudentPhotoPath, uploadImage } from "../students/actions";
 import { toast } from "@/components/ui/toast";
@@ -17,6 +16,7 @@ import { PatternFormat } from "react-number-format"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Prisma } from "@/generated/prisma/client";
 import { useState } from "react";
+import { NewStudentFormData, newStudentFormSchema } from "../students/schema";
 
 type CoursesWithClassPlans = Prisma.CourseGetPayload<{
   include: {
@@ -27,53 +27,6 @@ type CoursesWithClassPlans = Prisma.CourseGetPayload<{
 type NewStudentFormProps = {
   activeCourses: CoursesWithClassPlans
 }
-
-const newStudentFormSchema = z
-  .object({
-    name: z.string().trim().min(1, "Insira um nome válido"),
-    birthDate: z.date(),
-    studentPhoneNumber: z.string().optional(),
-    responsibleName: z.string().optional(),
-    responsiblePhoneNumber: z.string().optional(),
-    church: z.string().optional(),
-    address: z.string().min(1, "Insira um endereço válido"),
-    photo: z.instanceof(File).optional(),
-    photoPath: z.string().optional(),
-    course: z.string(),
-    modality: z.enum(["GROUP", "INDIVIDUAL"])
-  })
-  .superRefine((data, context) => {
-    const age = calculateAge(data.birthDate);
-
-    if (age < 18) {
-      if (!data.responsibleName?.trim()) {
-        context.addIssue({
-          code: "custom",
-          path: ["responsibleName"],
-          message: "Nome do responsável é obrigatório para menores de idade",
-        });
-      }
-
-      if (!data.responsiblePhoneNumber?.trim()) {
-        context.addIssue({
-          code: "custom",
-          path: ["responsiblePhoneNumber"],
-          message:
-            "Telefone do responsável é obrigatório para menores de idade",
-        });
-      }
-    } else {
-      if (!data.studentPhoneNumber?.trim()) {
-        context.addIssue({
-          code: "custom",
-          path: ["studentPhoneNumber"],
-          message: "Telefone do aluno é obrigatório para maiores de idade",
-        });
-      }
-    }
-  });
-
-export type NewStudentFormData = z.infer<typeof newStudentFormSchema>;
 
 export default function NewStudentForm({ activeCourses }: NewStudentFormProps) {
 

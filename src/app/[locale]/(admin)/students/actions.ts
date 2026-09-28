@@ -2,10 +2,10 @@
 
 import prisma from "@/lib/prisma";
 import { calculateAge } from "@/lib/utils";
-import { NewStudentFormData } from "../_components/new-student-form";
 import { createClient } from "@supabase/supabase-js"
 import { env } from "@/lib/env";
 import { ModalityType, Prisma } from "@/generated/prisma/client";
+import { NewStudentFormData } from "./schema";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
