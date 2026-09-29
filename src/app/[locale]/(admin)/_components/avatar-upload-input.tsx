@@ -54,7 +54,8 @@ export function AvatarUploadInput({value, onChange}: AvatarUploadInputProps) {
             src={avatarUrl}
             alt="student profile picture"
             fill
-            sizes="100vw"
+            sizes="256px"
+            priority
             className="object-cover"
           />
         ) : (

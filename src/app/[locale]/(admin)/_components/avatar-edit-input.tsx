@@ -6,7 +6,7 @@ import Image from "next/image";
 import { toast } from "@/components/ui/toast";
 import { Student } from "@/generated/prisma/client";
 import { getInitials } from "@/lib/utils";
-import {  uploadImage } from "../students/actions";
+import {  updateStudentPhotoPath, uploadImage } from "../students/actions";
 import { convertToWebp } from "@/lib/image";
 import { useRouter } from "@/i18n/navigation";
 
@@ -47,6 +47,8 @@ export function AvatarEditInput({ student, studentProfilePictureUrl }: AvatarEdi
             throw new Error("Failed updating student profile picture")
         }
 
+        await updateStudentPhotoPath(student.id, data.path)
+
         router.refresh()
     }
 
@@ -58,8 +60,9 @@ export function AvatarEditInput({ student, studentProfilePictureUrl }: AvatarEdi
                         src={studentProfilePictureUrl}
                         alt="student profile picture"
                         fill
-                        sizes="100vw"
+                        sizes="256px"
                         className="object-cover"
+                        priority
                     />
                 ) : (
                     <span className="text-5xl text-muted-foreground">{getInitials(student.name)}</span>
