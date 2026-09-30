@@ -1,6 +1,6 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Student } from "@/generated/prisma/client"
-import EditStudentDialog from "../../../_components/edit-student-dialog"
+import EditStudentDialog from "./edit-student-dialog"
 import { calculateAge, formatPhoneNumber } from "@/lib/utils"
 import { AvatarEditInput } from "../../../_components/avatar-edit-input"
 import { getStudentProfilePicture } from "../../actions"

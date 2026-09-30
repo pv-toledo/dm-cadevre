@@ -3,13 +3,13 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { SquarePen } from "lucide-react"
 import { Controller, useForm } from "react-hook-form";
-import { EditStudentFormData, editStudentFormSchema } from "../students/schema";
+import { EditStudentFormData, editStudentFormSchema } from "../../schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Student } from "@/generated/prisma/client";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { calculateAge } from "@/lib/utils";
-import { DateInput } from "./date-input";
+import { DateInput } from "../../../_components/date-input";
 import { PatternFormat } from "react-number-format";
 import { Button } from "@/components/ui/button";
 import { useTranslations } from "next-intl";
