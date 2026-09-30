@@ -5,7 +5,8 @@ import { calculateAge } from "@/lib/utils";
 import { createClient } from "@supabase/supabase-js"
 import { env } from "@/lib/env";
 import { ModalityType, Prisma } from "@/generated/prisma/client";
-import { NewStudentFormData } from "./schema";
+import { EditStudentFormData, NewStudentFormData } from "./schema";
+import { revalidatePath } from "next/cache";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
@@ -49,6 +50,27 @@ export async function updateStudentPhotoPath(studentId: string, studentPhotoPath
 
   } catch (error) {
     throw new Error("Error updating student photo path", { cause: error })
+  }
+}
+
+export async function updateStudentPersonalInfo (studentId: string, payload: EditStudentFormData) {
+  const updatedStudent = await prisma.student.update({
+    where: {
+      id: studentId
+    },
+    data: {
+      name: payload.name,
+      birthDate: payload.birthDate,
+      studentPhoneNumber: payload.studentPhoneNumber,
+      responsibleName: payload.responsibleName,
+      responsiblePhoneNumber: payload.responsiblePhoneNumber,
+      church: payload.church,
+      address: payload.address
+    }
+  })
+
+  if (!updatedStudent) {
+    throw new Error("Student not found")
   }
 }
 

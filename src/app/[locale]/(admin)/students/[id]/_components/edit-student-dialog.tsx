@@ -13,14 +13,22 @@ import { DateInput } from "../../../_components/date-input";
 import { PatternFormat } from "react-number-format";
 import { Button } from "@/components/ui/button";
 import { useTranslations } from "next-intl";
+import { updateStudentPersonalInfo } from "../../actions";
+import { toast } from "@/components/ui/toast";
+import { useEffect, useState, useTransition } from "react";
+import { useRouter } from "@/i18n/navigation";
 
 type EditStudentDialogProps = {
     student: Student
 }
 
-export default function EditStudentDialog({student}: EditStudentDialogProps) {
+export default function EditStudentDialog({ student }: EditStudentDialogProps) {
 
     const t = useTranslations("EditStudentPage")
+    const [isOpen, setIsOpen] = useState(false)
+    const [isRefreshing, startTransition] = useTransition()
+    const [saved, setSaved] = useState(false)
+    const router = useRouter()
 
     const form = useForm<EditStudentFormData>({
         resolver: zodResolver(editStudentFormSchema),
@@ -37,8 +45,44 @@ export default function EditStudentDialog({student}: EditStudentDialogProps) {
 
     const studentAge = calculateAge(form.watch("birthDate") ?? student.birthDate)
 
+    async function handleSubmit(payload: EditStudentFormData) {
+        try {
+            await updateStudentPersonalInfo(student.id, payload)
+            setSaved(true)
+            startTransition(() => {
+                router.refresh()
+            })
+        } catch {
+            toast.add({
+                type: "error",
+                description: "Erro ao atualizar informações pessoais"
+            })
+        }
+    }
+
+    useEffect(() => {
+        if (saved && !isRefreshing) {
+            setSaved(false)
+            setIsOpen(false)
+            form.reset(form.getValues())
+            toast.add({
+                type: "success",
+                description: "Informações pessoais atualizadas"
+            })
+        }
+    }, [saved, isRefreshing, form])
+
     return (
-        <Dialog onOpenChange={() => form.reset()}>
+        <Dialog
+            open={isOpen}
+            onOpenChange={(open) => {
+                setIsOpen(open);
+
+                if (!open) {
+                    form.reset();
+                }
+            }}
+        >
             <DialogTrigger className="hover:cursor-pointer">
                 <SquarePen />
             </DialogTrigger>
@@ -47,7 +91,7 @@ export default function EditStudentDialog({student}: EditStudentDialogProps) {
                     <DialogTitle>Editar informações do aluno</DialogTitle>
                 </DialogHeader>
                 <form
-                    // onSubmit={form.handleSubmit(handleSubmit)}
+                    onSubmit={form.handleSubmit(handleSubmit)}
                     className="flex flex-col gap-8 lg:gap-12"
                 >
                     <div className="flex flex-col gap-3 order-2 lg:order-1">
@@ -195,10 +239,14 @@ export default function EditStudentDialog({student}: EditStudentDialogProps) {
 
                         <Button
                             type="submit"
-                            disabled={!form.formState.isValid || form.formState.isSubmitting || !form.formState.isDirty}
-                            className="mt-5"
+                            disabled={
+                                !form.formState.isValid ||
+                                form.formState.isSubmitting ||
+                                isRefreshing ||
+                                !form.formState.isDirty
+                            }
                         >
-                            {form.formState.isSubmitting
+                            {form.formState.isSubmitting || isRefreshing
                                 ? t("submitButtonSubmitting")
                                 : t("submitButtonDefault")}
                         </Button>
