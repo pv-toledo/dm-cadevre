@@ -89,5 +89,21 @@
     "submitButtonSubmitting": "Registering...",
     "successToastMessage": "Student created successfully",
     "errorToastMessage": "Error creating student"
+  },
+  "PersonalInfoTable": {
+    "title": "Personal info",
+    "name": "Name",
+    "birthDate": "Birth date",
+    "age": "Age",
+    "responsibleName": "Responsible name",
+    "responsiblePhoneNumber": "Responsible phone number",
+    "studentPhoneNumber": "Student phone number",
+    "church": "Church",
+    "address": "Address"
+  },
+  "EditStudentDialog": {
+    "title": "Edit student personal info",
+    "submitButtonSubmitting": "Saving...",
+    "submitButtonDefault": "Save"
   }
 }

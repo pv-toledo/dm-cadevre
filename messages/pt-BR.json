@@ -90,5 +90,21 @@
     "submitButtonSubmitting": "Salvando...",
     "successToastMessage": "Aluno criado com sucesso",
     "errorToastMessage": "Erro ao criar aluno"
+  },
+  "PersonalInfoTable": {
+    "title": "Informações pessoais",
+    "name": "Nome",
+    "birthDate": "Data de nascimento",
+    "age": "Idade",
+    "responsibleName": "Nome do responsável",
+    "responsiblePhoneNumber": "Telefone do responsável",
+    "studentPhoneNumber": "Telefone do aluno",
+    "church": "Igreja",
+    "address": "Endereço"
+  },
+  "EditStudentDialog": {
+    "title": "Editar informações pessoais do aluno",
+    "submitButtonSubmitting": "Salvando...",
+    "submitButtonDefault": "Salvar"
   }
 }

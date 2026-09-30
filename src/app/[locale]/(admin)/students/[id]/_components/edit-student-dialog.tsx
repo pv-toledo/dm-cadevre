@@ -25,6 +25,8 @@ type EditStudentDialogProps = {
 export default function EditStudentDialog({ student }: EditStudentDialogProps) {
 
     const t = useTranslations("EditStudentPage")
+    const dialogTranslation = useTranslations("EditStudentDialog")
+
     const [isOpen, setIsOpen] = useState(false)
     const [isRefreshing, startTransition] = useTransition()
     const [saved, setSaved] = useState(false)
@@ -88,7 +90,7 @@ export default function EditStudentDialog({ student }: EditStudentDialogProps) {
             </DialogTrigger>
             <DialogContent className="min-w-[50%]">
                 <DialogHeader>
-                    <DialogTitle>Editar informações do aluno</DialogTitle>
+                    <DialogTitle>{dialogTranslation("title")}</DialogTitle>
                 </DialogHeader>
                 <form
                     onSubmit={form.handleSubmit(handleSubmit)}
@@ -247,8 +249,8 @@ export default function EditStudentDialog({ student }: EditStudentDialogProps) {
                             }
                         >
                             {form.formState.isSubmitting || isRefreshing
-                                ? t("submitButtonSubmitting")
-                                : t("submitButtonDefault")}
+                                ? dialogTranslation("submitButtonSubmitting")
+                                : dialogTranslation("submitButtonDefault")}
                         </Button>
                     </div>
                 </form>

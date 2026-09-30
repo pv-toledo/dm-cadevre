@@ -4,6 +4,7 @@ import EditStudentDialog from "./edit-student-dialog"
 import { calculateAge, formatPhoneNumber } from "@/lib/utils"
 import { AvatarEditInput } from "../../../_components/avatar-edit-input"
 import { getStudentProfilePicture } from "../../actions"
+import { getTranslations } from "next-intl/server"
 
 type PersonalInfoTableProps = {
     student: Student
@@ -11,6 +12,7 @@ type PersonalInfoTableProps = {
 
 export default async function PersonalInfoTable({ student }: PersonalInfoTableProps) {
 
+    const t = await getTranslations("PersonalInfoTable")
     const studentAge = calculateAge(student.birthDate)
     const studentProfilePicture = await getStudentProfilePicture(student.id)
 
@@ -22,7 +24,7 @@ export default async function PersonalInfoTable({ student }: PersonalInfoTablePr
                         <TableRow className="dark bg-sidebar text-sidebar-foreground hover:bg-sidebar">
                             <TableHead colSpan={2} className="p-0">
                                 <div className="flex items-center justify-between px-2 py-3">
-                                    <p>Informações pessoais</p>
+                                    <p>{t("title")}</p>
                                     <EditStudentDialog student={student} />
                                 </div>
                             </TableHead>
@@ -30,25 +32,25 @@ export default async function PersonalInfoTable({ student }: PersonalInfoTablePr
                     </TableHeader>
                     <TableBody>
                         <TableRow>
-                            <TableCell>Nome: </TableCell>
+                            <TableCell>{t("name")}: </TableCell>
                             <TableCell>{student.name}</TableCell>
                         </TableRow>
                         <TableRow>
-                            <TableCell>Data de nascimento: </TableCell>
+                            <TableCell>{t("birthDate")}: </TableCell>
                             <TableCell>{student.birthDate.toLocaleDateString("pt-BR", {timeZone: "UTC"})}</TableCell>
                         </TableRow>
                         <TableRow>
-                            <TableCell>Idade: </TableCell>
-                            <TableCell>{studentAge} anos</TableCell>
+                            <TableCell>{t("age")}: </TableCell>
+                            <TableCell>{studentAge}</TableCell>
                         </TableRow>
                         {studentAge < 18 ? (
                             <>
                                 <TableRow>
-                                    <TableCell>Nome do responsável: </TableCell>
+                                    <TableCell>{t("responsibleName")}: </TableCell>
                                     <TableCell>{student.responsibleName}</TableCell>
                                 </TableRow>
                                 <TableRow>
-                                    <TableCell>Telefone do responsável: </TableCell>
+                                    <TableCell>{t("responsiblePhoneNumber")}: </TableCell>
                                     <TableCell>{formatPhoneNumber(student.responsiblePhoneNumber)}</TableCell>
                                 </TableRow>
                             </>
@@ -56,16 +58,16 @@ export default async function PersonalInfoTable({ student }: PersonalInfoTablePr
                         ) : (
 
                             <TableRow>
-                                <TableCell>Telefone do aluno: </TableCell>
+                                <TableCell>{t("studentPhoneNumber")}: </TableCell>
                                 <TableCell>{formatPhoneNumber(student.studentPhoneNumber)}</TableCell>
                             </TableRow>
                         )}
                         <TableRow>
-                            <TableCell>Igreja: </TableCell>
+                            <TableCell>{t("church")}: </TableCell>
                             <TableCell>{student.church}</TableCell>
                         </TableRow>
                         <TableRow>
-                            <TableCell>Endereço: </TableCell>
+                            <TableCell>{t("address")}: </TableCell>
                             <TableCell className="whitespace-normal wrap-break-word">{student.address}</TableCell>
                         </TableRow>
                     </TableBody>
