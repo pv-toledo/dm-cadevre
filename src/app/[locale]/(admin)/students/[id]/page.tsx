@@ -1,8 +1,9 @@
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from "@/components/ui/breadcrumb"
 import { getTranslations } from "next-intl/server"
-import { getSingleStudent } from "../actions"
+import { getActiveCourses, getSingleStudentCompleteInfo } from "../actions"
 import UserBasicInfo from "./_components/user-basic-info"
 import PersonalInfoCard from "./_components/personal-info-card"
+import EnrollmentDetailCard from "./_components/enrollment-detail-card"
 
 type SingleStudentPageProps = {
     params: Promise<{ id: string }>
@@ -10,7 +11,8 @@ type SingleStudentPageProps = {
 
 export default async function SingleStudentPage({ params }: SingleStudentPageProps) {
     const { id } = await params
-    const student = await getSingleStudent(id)
+    const student = await getSingleStudentCompleteInfo(id)
+    const activeCourses = await getActiveCourses()
     const t = await getTranslations("SingleStudentPage")
 
     return (
@@ -35,6 +37,7 @@ export default async function SingleStudentPage({ params }: SingleStudentPagePro
             <div className="flex flex-col gap-10 items-start justify-center">
                 <UserBasicInfo student={student} />
                 <PersonalInfoCard student={student} />
+                <EnrollmentDetailCard student={student} activeCourses={activeCourses} />
             </div>
 
         </div>

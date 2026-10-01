@@ -3,7 +3,7 @@
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { calculateAge } from "@/lib/utils";
-import { createStudent, enrollStudent, updateStudentPhotoPath, uploadImage } from "../students/actions";
+import { CoursesWithClassPlans, createStudent, enrollStudent, updateStudentPhotoPath, uploadImage } from "../students/actions";
 import { toast } from "@/components/ui/toast";
 import { useTranslations } from "next-intl";
 import { Field, FieldLabel } from "@/components/ui/field";
@@ -14,15 +14,10 @@ import { AvatarUploadInput } from "./avatar-upload-input";
 import { convertToWebp } from "@/lib/image";
 import { PatternFormat } from "react-number-format"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Prisma } from "@/generated/prisma/client";
 import { useState } from "react";
 import { NewStudentFormData, newStudentFormSchema } from "../students/schema";
 
-type CoursesWithClassPlans = Prisma.CourseGetPayload<{
-  include: {
-    classPlans: true
-  }
-}>[]
+
 
 type NewStudentFormProps = {
   activeCourses: CoursesWithClassPlans

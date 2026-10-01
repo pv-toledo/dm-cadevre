@@ -1,11 +1,11 @@
-import { Student } from "@/generated/prisma/client"
 import EditStudentDialog from "./edit-student-dialog"
 import { calculateAge, formatPhoneNumber } from "@/lib/utils"
 import { getTranslations } from "next-intl/server"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { StudentCompleteInfo } from "../../actions"
 
 type PersonalInfoCardProps = {
-    student: Student
+    student: StudentCompleteInfo
 }
 
 export default async function PersonalInfoCard({ student }: PersonalInfoCardProps) {

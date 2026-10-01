@@ -53,7 +53,7 @@ export async function updateStudentPhotoPath(studentId: string, studentPhotoPath
   }
 }
 
-export async function updateStudentPersonalInfo (studentId: string, payload: EditStudentFormData) {
+export async function updateStudentPersonalInfo(studentId: string, payload: EditStudentFormData) {
   const updatedStudent = await prisma.student.update({
     where: {
       id: studentId
@@ -172,6 +172,12 @@ export async function getActiveCourses() {
   return courses
 }
 
+export type CoursesWithClassPlans = Prisma.CourseGetPayload<{
+  include: {
+    classPlans: true
+  }
+}>[]
+
 export async function enrollStudent(studentId: string, modality: ModalityType, courseId: string) {
 
   const selectedClassPlan = await prisma.classPlan.findUnique({
@@ -204,10 +210,20 @@ export async function enrollStudent(studentId: string, modality: ModalityType, c
 
 }
 
-export async function getSingleStudent(id: string) {
+export async function getSingleStudentCompleteInfo(id: string) {
   const student = await prisma.student.findUnique({
     where: {
       id
+    },
+    include: {
+      enrollments: {
+        include: {
+          classPlan: true,
+          loans: true,
+          maintenanceFees: true,
+          tuitionPayments: true
+        }
+      }
     }
   })
 
@@ -217,3 +233,16 @@ export async function getSingleStudent(id: string) {
 
   return student
 }
+
+export type StudentCompleteInfo = Prisma.StudentGetPayload<{
+  include: {
+    enrollments: {
+      include: {
+        classPlan: true,
+        loans: true,
+        maintenanceFees: true,
+        tuitionPayments: true
+      }
+    }
+  }
+}>

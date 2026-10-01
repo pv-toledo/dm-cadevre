@@ -106,5 +106,13 @@
     "title": "Editar informações pessoais do aluno",
     "submitButtonSubmitting": "Salvando...",
     "submitButtonDefault": "Salvar"
+  },
+  "EnrollmentDetailCard": {
+    "title": "Matrículas",
+    "groupModality": "Coletiva",
+    "individualModality": "Individual",
+    "activeStatus": "Ativo",
+    "inactiveStatus": "Trancado",
+    "startDate": "Início"
   }
 }

@@ -105,5 +105,13 @@
     "title": "Edit student personal info",
     "submitButtonSubmitting": "Saving...",
     "submitButtonDefault": "Save"
+  },
+  "EnrollmentDetailCard": {
+    "title": "Enrollments",
+    "groupModality": "Group",
+    "individualModality": "Individual",
+    "activeStatus": "Active",
+    "inactiveStatus": "Inactive",
+    "startDate": "Since"
   }
 }

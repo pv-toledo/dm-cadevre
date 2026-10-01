@@ -1,10 +1,9 @@
-import { Student } from "@/generated/prisma/client"
 import { AvatarEditInput } from "./avatar-edit-input"
-import { getStudentProfilePicture } from "../../actions"
+import { getStudentProfilePicture, StudentCompleteInfo } from "../../actions"
 import { calculateAge, formatPhoneNumber } from "@/lib/utils"
 
 type UserBasicInfoProps = {
-    student: Student
+    student: StudentCompleteInfo
 }
 
 export default async function UserBasicInfo({ student }: UserBasicInfoProps) {
