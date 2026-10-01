@@ -86,7 +86,7 @@ export default function EditStudentDialog({ student }: EditStudentDialogProps) {
             }}
         >
             <DialogTrigger className="hover:cursor-pointer">
-                <SquarePen />
+                <SquarePen size={20}/>
             </DialogTrigger>
             <DialogContent className="min-w-[50%]">
                 <DialogHeader>

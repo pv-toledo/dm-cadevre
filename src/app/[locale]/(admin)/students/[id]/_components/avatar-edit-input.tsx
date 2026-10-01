@@ -6,7 +6,7 @@ import Image from "next/image";
 import { toast } from "@/components/ui/toast";
 import { Student } from "@/generated/prisma/client";
 import { getInitials } from "@/lib/utils";
-import {  updateStudentPhotoPath, uploadImage } from "../students/actions";
+import {  updateStudentPhotoPath, uploadImage } from "../../actions";
 import { convertToWebp } from "@/lib/image";
 import { useRouter } from "@/i18n/navigation";
 
@@ -53,14 +53,13 @@ export function AvatarEditInput({ student, studentProfilePictureUrl }: AvatarEdi
     }
 
     return (
-        <div className="relative aspect-square w-36 rounded-full md:w-48 lg:w-64">
+        <div className="relative aspect-square w-24 rounded-full lg:w-32">
             <div className="relative size-full flex items-center justify-center overflow-hidden rounded-full bg-muted">
                 {studentProfilePictureUrl ? (
                     <Image
                         src={studentProfilePictureUrl}
                         alt="student profile picture"
                         fill
-                        sizes="256px"
                         className="object-cover"
                         priority
                     />
@@ -79,7 +78,7 @@ export function AvatarEditInput({ student, studentProfilePictureUrl }: AvatarEdi
 
             <label
                 htmlFor="avatar-upload"
-                className="absolute right-[8%] bottom-[8%] flex aspect-square w-[18%] cursor-pointer items-center justify-center rounded-full bg-primary text-primary-foreground ring-2 ring-background transition-opacity hover:opacity-90"
+                className="absolute right-[4%] bottom-[4%] flex aspect-square w-[25%] cursor-pointer items-center justify-center rounded-full bg-primary text-primary-foreground ring-2 ring-background transition-opacity hover:opacity-90"
             >
                 <Pencil className="size-[45%]" />
             </label>

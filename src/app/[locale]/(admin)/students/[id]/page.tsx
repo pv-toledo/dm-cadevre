@@ -1,7 +1,8 @@
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from "@/components/ui/breadcrumb"
 import { getTranslations } from "next-intl/server"
 import { getSingleStudent } from "../actions"
-import PersonalInfoTable from "./_components/personal-info-table"
+import UserBasicInfo from "./_components/user-basic-info"
+import PersonalInfoCard from "./_components/personal-info-card"
 
 type SingleStudentPageProps = {
     params: Promise<{ id: string }>
@@ -30,7 +31,11 @@ export default async function SingleStudentPage({ params }: SingleStudentPagePro
                 </BreadcrumbList>
             </Breadcrumb>
 
-            <PersonalInfoTable student={student} />
+            
+            <div className="flex flex-col gap-10 items-start justify-center">
+                <UserBasicInfo student={student} />
+                <PersonalInfoCard student={student} />
+            </div>
 
         </div>
     )
