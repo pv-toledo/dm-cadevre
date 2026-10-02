@@ -111,7 +111,8 @@
     "groupModality": "Group",
     "individualModality": "Individual",
     "activeStatus": "Active",
-    "inactiveStatus": "Inactive",
+    "lockedStatus": "Locked",
+    "endedStatus": "Ended",
     "startDate": "Since"
   }
 }

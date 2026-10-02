@@ -112,7 +112,8 @@
     "groupModality": "Coletiva",
     "individualModality": "Individual",
     "activeStatus": "Ativo",
-    "inactiveStatus": "Trancado",
+    "lockedStatus": "Trancado",
+    "endedStatus": "Cancelado",
     "startDate": "Início"
   }
 }

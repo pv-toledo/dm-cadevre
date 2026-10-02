@@ -4,7 +4,7 @@ import prisma from "@/lib/prisma";
 import { calculateAge } from "@/lib/utils";
 import { createClient } from "@supabase/supabase-js"
 import { env } from "@/lib/env";
-import { ModalityType, Prisma } from "@/generated/prisma/client";
+import { EnrollmentStatus, ModalityType, Prisma } from "@/generated/prisma/client";
 import { EditStudentFormData, NewStudentFormData } from "./schema";
 import { revalidatePath } from "next/cache";
 
@@ -210,6 +210,20 @@ export async function enrollStudent(studentId: string, modality: ModalityType, c
 
 }
 
+export async function lockStudentEnrollment(enrollmentId: string) {
+  await prisma.enrollment.update({
+    where: {
+      id: enrollmentId
+    },
+    data: {
+      status: "LOCKED",
+      lockedAt: new Date()
+    }
+  })
+
+  revalidatePath("/[locale]/students/[id]", "page")
+}
+
 export async function getSingleStudentCompleteInfo(id: string) {
   const student = await prisma.student.findUnique({
     where: {
@@ -245,4 +259,14 @@ export type StudentCompleteInfo = Prisma.StudentGetPayload<{
       }
     }
   }
+}>
+
+export type EnrollmentCompleteInfo = Prisma.EnrollmentGetPayload<{
+  include: {
+    classPlan: true,
+    loans: true,
+    maintenanceFees: true,
+    tuitionPayments: true
+  }
+
 }>
