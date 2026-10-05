@@ -224,6 +224,20 @@ export async function lockStudentEnrollment(enrollmentId: string) {
   revalidatePath("/[locale]/students/[id]", "page")
 }
 
+export async function unlockStudentEnrollment(enrollmentId: string) {
+  await prisma.enrollment.update({
+    where: {
+      id: enrollmentId
+    },
+    data: {
+      status: "ACTIVE",
+      startedAt: new Date()
+    }
+  })
+
+  revalidatePath("/[locale]/students/[id]", "page")
+}
+
 export async function getSingleStudentCompleteInfo(id: string) {
   const student = await prisma.student.findUnique({
     where: {
