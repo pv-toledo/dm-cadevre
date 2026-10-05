@@ -1,4 +1,3 @@
-
 import { Prisma, PrismaClient } from "@/generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import "dotenv/config";
@@ -306,6 +305,7 @@ async function seedLoans() {
             await prisma.loan.create({
                 data: {
                     instrumentId: instrument.id,
+                    studentId: enrollment.studentId,
                     enrollmentId: enrollment.id,
                     loanCondition,
                     loanConditionDescription,
@@ -327,6 +327,7 @@ async function seedLoans() {
             await prisma.loan.create({
                 data: {
                     instrumentId: instrument.id,
+                    studentId: enrollment.studentId,
                     enrollmentId: enrollment.id,
                     loanCondition,
                     loanConditionDescription,
@@ -355,6 +356,34 @@ async function seedLoans() {
         if (Math.random() < 0.35) {
             await createLoan(enrollment, false);
         }
+    }
+
+    // Empréstimo avulso: pessoa sem nenhuma matrícula
+    const looseInstrument = instruments.find(
+        (i) => i.status === "AVAILABLE" && !busyInstrumentIds.has(i.id)
+    );
+    if (looseInstrument) {
+        const visitor = await prisma.student.create({
+            data: {
+                name: "Visitante Sem Matrícula",
+                birthDate: new Date("1990-05-10"),
+                address: "Rua Exemplo, 100 - Botafogo",
+                studentPhoneNumber: "(21) 90000-0000",
+            },
+        });
+
+        await prisma.loan.create({
+            data: {
+                instrumentId: looseInstrument.id,
+                studentId: visitor.id,
+                loanCondition: "PERFECT",
+                loanedAt: randomPastDate(2),
+            },
+        });
+        await prisma.instrument.update({
+            where: { id: looseInstrument.id },
+            data: { status: "LOANED" },
+        });
     }
 }
 
@@ -449,6 +478,7 @@ async function seedMaintenanceFees() {
 
     const yearsByEnrollment = new Map<string, Set<number>>();
     for (const loan of loans) {
+        if (!loan.enrollmentId) continue;
         const year = loan.loanedAt.getFullYear();
         const set = yearsByEnrollment.get(loan.enrollmentId) ?? new Set<number>();
         set.add(year);

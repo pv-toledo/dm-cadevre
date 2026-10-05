@@ -11,8 +11,8 @@ const baseStudentFormSchema = z.object({
   address: z.string().min(1, "Insira um endereço válido"),
   photo: z.instanceof(File).optional(),
   photoPath: z.string().optional(),
-  course: z.string(),
-  modality: z.enum(["GROUP", "INDIVIDUAL"]),
+  course: z.string().optional(),
+  modality: z.enum(["GROUP", "INDIVIDUAL"]).optional(),
 });
 
 export const newStudentFormSchema = baseStudentFormSchema.superRefine(

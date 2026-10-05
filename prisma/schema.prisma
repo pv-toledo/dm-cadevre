@@ -35,6 +35,7 @@ model Student {
 
   enrollments Enrollment[]
   userProfiles UserProfile[]
+  loans Loan[]
 
   @@map("students")
 }
@@ -164,8 +165,9 @@ model Enrollment {
 
   model Loan {
     id String @id @default(uuid()) @db.Uuid
+    studentId String @map("student_id") @db.Uuid
     instrumentId String @map("instrument_id") @db.Uuid
-    enrollmentId String @map("enrollment_id") @db.Uuid
+    enrollmentId String? @map("enrollment_id") @db.Uuid
     loanCondition InstrumentCondition @map("loan_condition")
     loanConditionDescription String? @map("loan_condition_description")
     loanedAt DateTime @default(now()) @map("loaned_at")
@@ -174,7 +176,8 @@ model Enrollment {
     returnConditionDescription String? @map("return_condition_description")
 
     instrument Instrument @relation(fields: [instrumentId], references: [id])
-    enrollment Enrollment @relation(fields: [enrollmentId], references: [id])
+    student    Student     @relation(fields: [studentId], references: [id])
+    enrollment Enrollment? @relation(fields: [enrollmentId], references: [id])
 
     @@map("loans")
   }

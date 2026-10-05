@@ -64,7 +64,11 @@ export default function NewStudentForm({ activeCourses }: NewStudentFormProps) {
         }
       }
 
-      await enrollStudent(newStudent.id, data.modality, data.course)
+      if (data.course && data.modality) {
+        await enrollStudent(newStudent.id, data.modality, data.course)
+      }
+
+
 
       toast.add({
         type: "success",
