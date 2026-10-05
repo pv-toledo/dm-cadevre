@@ -17,10 +17,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Ellipsis, LockKeyhole, LockKeyholeOpen } from "lucide-react";
+import { CircleX, Ellipsis, LockKeyhole, LockKeyholeOpen } from "lucide-react";
 import { useOptimistic, useState, useTransition } from "react";
 import { toast } from "@/components/ui/toast";
 import {
+    endStudentEnrollment,
   EnrollmentCompleteInfo,
   lockStudentEnrollment,
   unlockStudentEnrollment,
@@ -37,10 +38,13 @@ export default function StudentEnrollmentBadge({
 }: StudentEnrollmentBadgeProps) {
   const [isLockOpen, setIsLockOpen] = useState(false);
   const [isUnlockOpen, setIsUnlockOpen] = useState(false);
+  const [isEndedOpen, setIsEndedOpen] = useState(false);
+
   const [isPending, startTransiton] = useTransition();
   const [optimisticStatus, setOptimisticStatus] = useOptimistic(
     enrollment.status,
   );
+
   const t = useTranslations("EnrollmentDetailCard");
 
   const enrollmentStatusConfig = {
@@ -78,6 +82,7 @@ export default function StudentEnrollmentBadge({
       }
     });
   }
+
   function handleEnrollmentUnlock(enrollmentId: string) {
     startTransiton(async () => {
       setOptimisticStatus("ACTIVE");
@@ -88,6 +93,21 @@ export default function StudentEnrollmentBadge({
         toast.add({
           type: "error",
           description: "Erro ao reativar matrícula",
+        });
+      }
+    });
+  }
+
+  function handleEnrollmentEnd(enrollmentId: string) {
+    startTransiton(async () => {
+      setOptimisticStatus("ACTIVE");
+      try {
+        await endStudentEnrollment(enrollmentId);
+        setIsEndedOpen(false);
+      } catch {
+        toast.add({
+          type: "error",
+          description: "Erro ao encerrar matrícula",
         });
       }
     });
@@ -123,8 +143,11 @@ export default function StudentEnrollmentBadge({
             <button
               type="button"
               className="inline-flex size-8 items-center justify-center rounded-md"
+              disabled={enrollment.status === "ENDED"}
             >
-              <Ellipsis />
+              {enrollment.status !== "ENDED" && (
+                <Ellipsis />
+              )}
             </button>
           }
         />
@@ -142,6 +165,10 @@ export default function StudentEnrollmentBadge({
               <span>Destrancar matrícula</span>
             </DropdownMenuItem>
           )}
+          <DropdownMenuItem onClick={() => setIsEndedOpen(true)}>
+            <CircleX />
+            <span>Encerrar matrícula</span>
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
 
@@ -192,6 +219,32 @@ export default function StudentEnrollmentBadge({
               onClick={() => handleEnrollmentUnlock(enrollment.id)}
             >
               Destrancar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog
+        open={isEndedOpen}
+        onOpenChange={(next) => {
+          if (!isPending) setIsEndedOpen(next);
+        }}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-lg">
+              Deseja encerrar esta matrícula?
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-base">
+              A matrícula será encerrada e não poderá ser ativada novamente. Em caso de retorno do aluno, será necessário a criação de uma nova matrícula.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="border-0">
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => handleEnrollmentEnd(enrollment.id)}
+            >
+              Encerrar
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
