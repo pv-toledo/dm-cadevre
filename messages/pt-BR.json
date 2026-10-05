@@ -127,14 +127,15 @@
     "cancelEnrollmentTitle": "Deseja cancelar a matrícula?",
     "cancelEnrollmentDescription": "A matrícula será cancelada e não poderá ser ativada novamente. Em caso de retorno do aluno, será necessário crair uma nova matrícula.",
     "cancel": "Cancelar",
-
     "lock": "Trancar",
     "locking": "Trancando",
-
     "unlock": "Destrancar",
     "unlocking": "Destrancando",
-
     "cancelEnrollment": "Encerrar",
     "cancelling": "Encerrando"
+  },
+  "StudentLoanCard": {
+    "activeStatus": "Ativo",
+    "endedStatus": "Encerrado"
   }
 }

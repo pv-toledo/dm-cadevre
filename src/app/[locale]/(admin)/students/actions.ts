@@ -257,6 +257,11 @@ export async function getSingleStudentCompleteInfo(id: string) {
       id
     },
     include: {
+      loans: {
+        include: {
+          instrument: true
+        }
+      },
       enrollments: {
         include: {
           classPlan: true,
@@ -282,10 +287,14 @@ export async function getSingleStudentCompleteInfo(id: string) {
 
 export type StudentCompleteInfo = Prisma.StudentGetPayload<{
   include: {
+    loans: {
+      include: {
+        instrument: true
+      }
+    },
     enrollments: {
       include: {
         classPlan: true,
-        loans: true,
         maintenanceFees: true,
         tuitionPayments: true
       }
@@ -296,9 +305,22 @@ export type StudentCompleteInfo = Prisma.StudentGetPayload<{
 export type EnrollmentCompleteInfo = Prisma.EnrollmentGetPayload<{
   include: {
     classPlan: true,
-    loans: true,
     maintenanceFees: true,
     tuitionPayments: true
   }
 
 }>
+
+export async function getMaintenanceFeePayments (maintenanceFeeId : string) {
+  const maintenanceFeePayments = await prisma.maintenanceFee.findMany({
+    where: {
+      id: maintenanceFeeId
+    }
+  })
+
+  if (!maintenanceFeePayments) {
+    throw new Error("No maintenance fee payment found")
+  }
+
+  return maintenanceFeePayments
+}

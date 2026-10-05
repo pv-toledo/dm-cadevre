@@ -135,5 +135,9 @@
 
     "cancelEnrollment": "End",
     "cancelling": "Cancelling"
+  },
+  "StudentLoanCard": {
+    "activeStatus": "Active",
+    "endedStatus": "Ended"
   }
 }
