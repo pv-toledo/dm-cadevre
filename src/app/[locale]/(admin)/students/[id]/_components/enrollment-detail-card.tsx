@@ -20,26 +20,17 @@ export default async function EnrollmentDetailCard({
     INDIVIDUAL: t("individualModality"),
   } as const;
 
-  console.log(
-    student.enrollments.map((e) => ({
-      status: e.status,
-      startedAt: e.startedAt.toISOString(),
-      lockedAt: e.lockedAt?.toISOString(),
-      endedAt: e.endedAt?.toISOString(),
-    })),
-  );
-
   const timeZone = (await cookies()).get("timezone")?.value ?? "UTC";
   const locale = await getLocale();
 
   return (
-    <Card className="w-full">
+    <Card className="w-full gap-0 pb-0">
       <CardHeader className="border-b border-muted-foreground/30">
         <CardTitle className="text-base lg:text-lg">{t("title")}</CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="px-0 gap-3">
         {student.enrollments.map((e) => (
-          <div key={e.id} className="flex items-center justify-between">
+          <div key={e.id} className="flex items-center justify-between border-b border-muted-foreground/30 px-4 py-3 last:border-b-0">
             <div className="flex flex-col">
               <p className="font-display font-medium text-sm lg:text-base">
                 {

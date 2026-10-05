@@ -156,18 +156,18 @@ export default function StudentEnrollmentBadge({
           {enrollment.status === "ACTIVE" && (
             <DropdownMenuItem onClick={() => setIsLockOpen(true)}>
               <LockKeyhole />
-              <span>Trancar matrícula</span>
+              <span>{t("lockEnrollmentOption")}</span>
             </DropdownMenuItem>
           )}
           {enrollment.status === "LOCKED" && (
             <DropdownMenuItem onClick={() => setIsUnlockOpen(true)}>
               <LockKeyholeOpen />
-              <span>Destrancar matrícula</span>
+              <span>{t("unlockEnrollmentOption")}</span>
             </DropdownMenuItem>
           )}
           <DropdownMenuItem onClick={() => setIsEndedOpen(true)}>
             <CircleX />
-            <span>Encerrar matrícula</span>
+            <span>{t("cancelEnrollmentOption")}</span>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -181,18 +181,22 @@ export default function StudentEnrollmentBadge({
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle className="text-lg">
-              Deseja trancar esta matrícula?
+              {t("lockEnrollmentTitle")}
             </AlertDialogTitle>
             <AlertDialogDescription className="text-base">
-              A matrícula poderá ser reativada posteriormente.
+              {t("lockEnrollmentDescription")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter className="border-0">
-            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => handleEnrollmentLock(enrollment.id)}
             >
-              Trancar
+              {!isPending ? (
+                t("lock")
+              ) : (
+                t("locking")
+              )}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -207,18 +211,22 @@ export default function StudentEnrollmentBadge({
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle className="text-lg">
-              Deseja destrancar esta matrícula?
+              {t("unlockEnrollmentTitle")}
             </AlertDialogTitle>
             <AlertDialogDescription className="text-base">
-              A matrícula poderá ser trancada ou encerrada posteriormente.
+              {t("unlockEnrollmentDescription")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter className="border-0">
-            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => handleEnrollmentUnlock(enrollment.id)}
             >
-              Destrancar
+              {!isPending ? (
+                t("unlock")
+              ) : (
+                t("unlocking")
+              )}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -233,18 +241,22 @@ export default function StudentEnrollmentBadge({
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle className="text-lg">
-              Deseja encerrar esta matrícula?
+              {t("cancelEnrollmentTitle")}
             </AlertDialogTitle>
             <AlertDialogDescription className="text-base">
-              A matrícula será encerrada e não poderá ser ativada novamente. Em caso de retorno do aluno, será necessário a criação de uma nova matrícula.
+              {t("cancelEnrollmentDescription")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter className="border-0">
-            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => handleEnrollmentEnd(enrollment.id)}
             >
-              Encerrar
+              {!isPending ? (
+                t("cancelEnrollment")
+              ) : (
+                t("cancelling")
+              )}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

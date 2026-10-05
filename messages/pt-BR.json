@@ -116,6 +116,25 @@
     "endedStatus": "Cancelado",
     "startDate": "Início",
     "lockingDate": "Trancado em",
-    "endingDate": "Encerrado em"
+    "endingDate": "Encerrado em",
+    "lockEnrollmentOption": "Trancar matrícula",
+    "lockEnrollmentTitle": "Deseja trancar a matrícula?",
+    "lockEnrollmentDescription": "A matrícula poderá ser destrancada a qualquer momento",
+    "unlockEnrollmentOption": "Destrancar matrícula",
+    "unlockEnrollmentTitle": "Deseja destrancar a matrícula?",
+    "unlockEnrollmentDescription": "A matrícula poderá ser trancada ou cancelada a qualquer momento",
+    "cancelEnrollmentOption": "Cancelar matrícula",
+    "cancelEnrollmentTitle": "Deseja cancelar a matrícula?",
+    "cancelEnrollmentDescription": "A matrícula será cancelada e não poderá ser ativada novamente. Em caso de retorno do aluno, será necessário crair uma nova matrícula.",
+    "cancel": "Cancelar",
+
+    "lock": "Trancar",
+    "locking": "Trancando",
+
+    "unlock": "Destrancar",
+    "unlocking": "Destrancando",
+
+    "cancelEnrollment": "Encerrar",
+    "cancelling": "Encerrando"
   }
 }

@@ -115,6 +115,25 @@
     "endedStatus": "Ended",
     "startDate": "Since",
     "lockingDate": "Locked at",
-    "endingDate": "Ended at"
+    "endingDate": "Ended at",
+    "lockEnrollmentOption": "Lock enrollment",
+    "lockEnrollmentTitle": "Lock this enrollment?",
+    "lockEnrollmentDescription": "This enrollment can be unlocked at any time",
+    "unlockEnrollmentOption": "Unlock enrollment",
+    "unlockEnrollmentTitle": "Unlock this enrollment?",
+    "unlockEnrollmentDescription": "This enrollment can be locked or cancelled at any time",
+    "cancelEnrollmentOption": "Cancel enrollment",
+    "cancelEnrollmentTitle": "Cancel this enrollment?",
+    "cancelEnrollmentDescription": "This enrollment will be cancelled and cannot be actived again. In case the student returns, a new enrollment will be required",
+    "cancel": "Cancel",
+
+    "lock": "Lock",
+    "locking": "Locking",
+
+    "unlock": "Unlock",
+    "unlocking": "Unlocking",
+
+    "cancelEnrollment": "End",
+    "cancelling": "Cancelling"
   }
 }

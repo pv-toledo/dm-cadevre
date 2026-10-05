@@ -263,7 +263,12 @@ export async function getSingleStudentCompleteInfo(id: string) {
           loans: true,
           maintenanceFees: true,
           tuitionPayments: true
-        }
+        },
+        orderBy: [
+          {startedAt: "desc"},
+          {lockedAt: "desc"},
+          {endedAt: "desc"}
+        ]
       }
     }
   })
