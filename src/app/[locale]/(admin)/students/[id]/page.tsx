@@ -4,6 +4,7 @@ import { getActiveCourses, getSingleStudentCompleteInfo } from "../actions"
 import UserBasicInfo from "./_components/user-basic-info"
 import PersonalInfoCard from "./_components/personal-info-card"
 import EnrollmentDetailCard from "./_components/enrollment-detail-card"
+import StudentLoanCard from "./_components/student-loan-card"
 
 type SingleStudentPageProps = {
     params: Promise<{ id: string }>
@@ -36,8 +37,10 @@ export default async function SingleStudentPage({ params }: SingleStudentPagePro
             
             <div className="flex flex-col gap-10 items-start justify-center">
                 <UserBasicInfo student={student} />
+                <StudentLoanCard student={student}/>
                 <PersonalInfoCard student={student} />
                 <EnrollmentDetailCard student={student} activeCourses={activeCourses} />
+                
             </div>
 
         </div>
