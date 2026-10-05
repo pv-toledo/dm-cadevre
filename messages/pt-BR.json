@@ -114,6 +114,8 @@
     "activeStatus": "Ativo",
     "lockedStatus": "Trancado",
     "endedStatus": "Cancelado",
-    "startDate": "Início"
+    "startDate": "Início",
+    "lockingDate": "Trancado em",
+    "endingDate": "Encerrado em"
   }
 }

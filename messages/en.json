@@ -113,6 +113,8 @@
     "activeStatus": "Active",
     "lockedStatus": "Locked",
     "endedStatus": "Ended",
-    "startDate": "Since"
+    "startDate": "Since",
+    "lockingDate": "Locked at",
+    "endingDate": "Ended at"
   }
 }

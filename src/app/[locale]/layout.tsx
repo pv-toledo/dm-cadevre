@@ -5,6 +5,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getLocale } from "next-intl/server";
 import { NuqsAdapter } from 'nuqs/adapters/next/app'
 import { Toaster } from "@/components/ui/toast";
+import TimezoneDetector from "./(admin)/_components/timezone-detector";
 
 const plusJakarta = Plus_Jakarta_Sans({
   variable: "--font-display",
@@ -40,6 +41,7 @@ export default async function RootLayout({ children }: LayoutProps<"/[locale]">)
     >
       <body className="min-h-full flex flex-col">
         <NextIntlClientProvider>
+          <TimezoneDetector />
           <NuqsAdapter>
             {children}
             <Toaster />
